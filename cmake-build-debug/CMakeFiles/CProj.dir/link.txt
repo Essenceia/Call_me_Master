@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCProj.a  CMakeFiles/CProj.dir/lib_server.c.o CMakeFiles/CProj.dir/main.c.o CMakeFiles/CProj.dir/lib_connection.c.o
+/usr/bin/ranlib libCProj.a
