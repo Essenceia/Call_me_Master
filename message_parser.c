@@ -3,10 +3,10 @@
 //
 #include "message_parser.h"
 #include <stdio.h>
-#include <zconf.h>
 #include <memory.h>
 #include "message_helper.h"
 #include "message_defines.h"
+#include <unistd.h>
 #define DEBUG
 struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
 #ifdef DEBUG

@@ -3,10 +3,8 @@
 //
 #include "message_helper.h"
 #include "message_defines.h"
-//#include "client_registration.h"
 #include <stdio.h>
-#include <memory.h>
-#include <zconf.h>
+#include <unistd.h>
 #define DEBUG
 
 char check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){

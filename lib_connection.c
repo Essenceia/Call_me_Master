@@ -34,6 +34,7 @@ void player_handler(void* player, int socket){
     u_int8_t max_wait_time=0;
     struct connection_base *Player = (struct connection_base*)player;
     //send ok message
+    u_int8_t *buf,msgsize;
     u_int8_t *send_msg = msg_ok(Player->client_type);
 
     ssize_t sendres= send(socket,send_msg,5,0);
@@ -58,9 +59,10 @@ void player_handler(void* player, int socket){
             //send New move
             printf("INFO_%d:Out turn to play\n",getpid());
 
-            //start timeout counter
+            //todo start timeout counter
 
             //wait for move
+            recv(socket, buf ,msgsize ,0);
 
             //check move
         }

@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <memory.h>
 #include "message_defines.h"
-#include <unistd.h>
 u_int8_t run_connection(struct connection_base victim);
 /*
  * Create new connection base structure - initialise a connection and find
