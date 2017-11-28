@@ -99,3 +99,6 @@ u_int8_t* msg_ok(u_int8_t type){
     return ret;
 
 }
+u_int8_t *next_turn(u_int8_t player_id){
+
+}

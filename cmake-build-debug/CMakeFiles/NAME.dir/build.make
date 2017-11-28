@@ -81,9 +81,33 @@ CMakeFiles/NAME.dir/main.c.o.provides: CMakeFiles/NAME.dir/main.c.o.requires
 CMakeFiles/NAME.dir/main.c.o.provides.build: CMakeFiles/NAME.dir/main.c.o
 
 
+CMakeFiles/NAME.dir/board_handler.c.o: CMakeFiles/NAME.dir/flags.make
+CMakeFiles/NAME.dir/board_handler.c.o: ../board_handler.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/NAME.dir/board_handler.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/board_handler.c.o   -c /home/pookie/Documents/code/C/CProj/board_handler.c
+
+CMakeFiles/NAME.dir/board_handler.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/NAME.dir/board_handler.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pookie/Documents/code/C/CProj/board_handler.c > CMakeFiles/NAME.dir/board_handler.c.i
+
+CMakeFiles/NAME.dir/board_handler.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/NAME.dir/board_handler.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pookie/Documents/code/C/CProj/board_handler.c -o CMakeFiles/NAME.dir/board_handler.c.s
+
+CMakeFiles/NAME.dir/board_handler.c.o.requires:
+
+.PHONY : CMakeFiles/NAME.dir/board_handler.c.o.requires
+
+CMakeFiles/NAME.dir/board_handler.c.o.provides: CMakeFiles/NAME.dir/board_handler.c.o.requires
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/board_handler.c.o.provides.build
+.PHONY : CMakeFiles/NAME.dir/board_handler.c.o.provides
+
+CMakeFiles/NAME.dir/board_handler.c.o.provides.build: CMakeFiles/NAME.dir/board_handler.c.o
+
+
 CMakeFiles/NAME.dir/message_helper.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/message_helper.c.o: ../message_helper.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/NAME.dir/message_helper.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/NAME.dir/message_helper.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/message_helper.c.o   -c /home/pookie/Documents/code/C/CProj/message_helper.c
 
 CMakeFiles/NAME.dir/message_helper.c.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/NAME.dir/message_helper.c.o.provides.build: CMakeFiles/NAME.dir/messa
 
 CMakeFiles/NAME.dir/message_parser.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/message_parser.c.o: ../message_parser.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/NAME.dir/message_parser.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/NAME.dir/message_parser.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/message_parser.c.o   -c /home/pookie/Documents/code/C/CProj/message_parser.c
 
 CMakeFiles/NAME.dir/message_parser.c.i: cmake_force
@@ -131,7 +155,7 @@ CMakeFiles/NAME.dir/message_parser.c.o.provides.build: CMakeFiles/NAME.dir/messa
 
 CMakeFiles/NAME.dir/connection_base_struct.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../connection_base_struct.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/NAME.dir/connection_base_struct.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/NAME.dir/connection_base_struct.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/connection_base_struct.c.o   -c /home/pookie/Documents/code/C/CProj/connection_base_struct.c
 
 CMakeFiles/NAME.dir/connection_base_struct.c.i: cmake_force
@@ -155,7 +179,7 @@ CMakeFiles/NAME.dir/connection_base_struct.c.o.provides.build: CMakeFiles/NAME.d
 
 CMakeFiles/NAME.dir/time_keeper.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/time_keeper.c.o: ../time_keeper.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/NAME.dir/time_keeper.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/NAME.dir/time_keeper.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/time_keeper.c.o   -c /home/pookie/Documents/code/C/CProj/time_keeper.c
 
 CMakeFiles/NAME.dir/time_keeper.c.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/NAME.dir/time_keeper.c.o.provides.build: CMakeFiles/NAME.dir/time_kee
 
 CMakeFiles/NAME.dir/lib_server.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/lib_server.c.o: ../lib_server.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/NAME.dir/lib_server.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/NAME.dir/lib_server.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/lib_server.c.o   -c /home/pookie/Documents/code/C/CProj/lib_server.c
 
 CMakeFiles/NAME.dir/lib_server.c.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/NAME.dir/lib_server.c.o.provides.build: CMakeFiles/NAME.dir/lib_serve
 
 CMakeFiles/NAME.dir/lib_connection.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/lib_connection.c.o: ../lib_connection.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/NAME.dir/lib_connection.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/NAME.dir/lib_connection.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/lib_connection.c.o   -c /home/pookie/Documents/code/C/CProj/lib_connection.c
 
 CMakeFiles/NAME.dir/lib_connection.c.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/NAME.dir/lib_connection.c.o.provides.build: CMakeFiles/NAME.dir/lib_c
 
 CMakeFiles/NAME.dir/client_registration.c.o: CMakeFiles/NAME.dir/flags.make
 CMakeFiles/NAME.dir/client_registration.c.o: ../client_registration.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/NAME.dir/client_registration.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/NAME.dir/client_registration.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/client_registration.c.o   -c /home/pookie/Documents/code/C/CProj/client_registration.c
 
 CMakeFiles/NAME.dir/client_registration.c.i: cmake_force
@@ -249,46 +273,23 @@ CMakeFiles/NAME.dir/client_registration.c.o.provides: CMakeFiles/NAME.dir/client
 CMakeFiles/NAME.dir/client_registration.c.o.provides.build: CMakeFiles/NAME.dir/client_registration.c.o
 
 
-CMakeFiles/NAME.dir/board_handler.c.o: CMakeFiles/NAME.dir/flags.make
-CMakeFiles/NAME.dir/board_handler.c.o: ../board_handler.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/NAME.dir/board_handler.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/NAME.dir/board_handler.c.o   -c /home/pookie/Documents/code/C/CProj/board_handler.c
-
-CMakeFiles/NAME.dir/board_handler.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/NAME.dir/board_handler.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pookie/Documents/code/C/CProj/board_handler.c > CMakeFiles/NAME.dir/board_handler.c.i
-
-CMakeFiles/NAME.dir/board_handler.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/NAME.dir/board_handler.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pookie/Documents/code/C/CProj/board_handler.c -o CMakeFiles/NAME.dir/board_handler.c.s
-
-CMakeFiles/NAME.dir/board_handler.c.o.requires:
-
-.PHONY : CMakeFiles/NAME.dir/board_handler.c.o.requires
-
-CMakeFiles/NAME.dir/board_handler.c.o.provides: CMakeFiles/NAME.dir/board_handler.c.o.requires
-	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/board_handler.c.o.provides.build
-.PHONY : CMakeFiles/NAME.dir/board_handler.c.o.provides
-
-CMakeFiles/NAME.dir/board_handler.c.o.provides.build: CMakeFiles/NAME.dir/board_handler.c.o
-
-
 # Object files for target NAME
 NAME_OBJECTS = \
 "CMakeFiles/NAME.dir/main.c.o" \
+"CMakeFiles/NAME.dir/board_handler.c.o" \
 "CMakeFiles/NAME.dir/message_helper.c.o" \
 "CMakeFiles/NAME.dir/message_parser.c.o" \
 "CMakeFiles/NAME.dir/connection_base_struct.c.o" \
 "CMakeFiles/NAME.dir/time_keeper.c.o" \
 "CMakeFiles/NAME.dir/lib_server.c.o" \
 "CMakeFiles/NAME.dir/lib_connection.c.o" \
-"CMakeFiles/NAME.dir/client_registration.c.o" \
-"CMakeFiles/NAME.dir/board_handler.c.o"
+"CMakeFiles/NAME.dir/client_registration.c.o"
 
 # External object files for target NAME
 NAME_EXTERNAL_OBJECTS =
 
 NAME: CMakeFiles/NAME.dir/main.c.o
+NAME: CMakeFiles/NAME.dir/board_handler.c.o
 NAME: CMakeFiles/NAME.dir/message_helper.c.o
 NAME: CMakeFiles/NAME.dir/message_parser.c.o
 NAME: CMakeFiles/NAME.dir/connection_base_struct.c.o
@@ -296,7 +297,6 @@ NAME: CMakeFiles/NAME.dir/time_keeper.c.o
 NAME: CMakeFiles/NAME.dir/lib_server.c.o
 NAME: CMakeFiles/NAME.dir/lib_connection.c.o
 NAME: CMakeFiles/NAME.dir/client_registration.c.o
-NAME: CMakeFiles/NAME.dir/board_handler.c.o
 NAME: CMakeFiles/NAME.dir/build.make
 NAME: CMakeFiles/NAME.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C executable NAME"
@@ -308,6 +308,7 @@ CMakeFiles/NAME.dir/build: NAME
 .PHONY : CMakeFiles/NAME.dir/build
 
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/main.c.o.requires
+CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/board_handler.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/message_helper.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/message_parser.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/connection_base_struct.c.o.requires
@@ -315,7 +316,6 @@ CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/time_keeper.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/lib_server.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/lib_connection.c.o.requires
 CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/client_registration.c.o.requires
-CMakeFiles/NAME.dir/requires: CMakeFiles/NAME.dir/board_handler.c.o.requires
 
 .PHONY : CMakeFiles/NAME.dir/requires
 

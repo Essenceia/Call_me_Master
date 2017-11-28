@@ -12,7 +12,6 @@ typedef struct server_struct{
     int socket_desc;
   struct sockaddr_in srv_addr;
    // socklen_t addr_size;
-    int size_sock_addr;
     struct connection_base cbase[MAX_CLIENT_NUMBER];
     pid_t childpid[MAX_CLIENT_NUMBER];
 };

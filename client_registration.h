@@ -2,7 +2,7 @@
 // Created by pookie on 17/11/17.
 //
 
-#include <zconf.h>
+#include <stdlib.h>
 
 #ifndef CPROJ_CLIENT_REGISTRATION_H
 #define CPROJ_CLIENT_REGISTRATION_H

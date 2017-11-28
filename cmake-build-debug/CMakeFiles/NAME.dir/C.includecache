@@ -17,8 +17,6 @@ board_handler.h
 /home/pookie/Documents/code/C/CProj/board_handler.h
 
 /home/pookie/Documents/code/C/CProj/board_handler.h
-zconf.h
--
 
 /home/pookie/Documents/code/C/CProj/client_registration.c
 client_registration.h
@@ -27,7 +25,7 @@ stdio.h
 -
 
 /home/pookie/Documents/code/C/CProj/client_registration.h
-zconf.h
+stdlib.h
 -
 
 /home/pookie/Documents/code/C/CProj/connection_base_struct.c
@@ -59,11 +57,15 @@ connection_base_struct.h
 /home/pookie/Documents/code/C/CProj/connection_base_struct.h
 message_helper.h
 /home/pookie/Documents/code/C/CProj/message_helper.h
+message_defines.h
+/home/pookie/Documents/code/C/CProj/message_defines.h
 arpa/inet.h
 -
 string.h
 -
 stdio.h
+-
+unistd.h
 -
 
 /home/pookie/Documents/code/C/CProj/lib_connection.h
@@ -82,6 +84,8 @@ board_handler.h
 string.h
 -
 signal.h
+-
+unistd.h
 -
 
 /home/pookie/Documents/code/C/CProj/lib_server.h

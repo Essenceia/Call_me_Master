@@ -11,4 +11,5 @@ u_int8_t get_crc(u_int8_t *appmsg,size_t alng);
 u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng);
 u_int8_t *prepare_message(u_int8_t type,u_int8_t *msg,u_int8_t length);
 u_int8_t* msg_ok(u_int8_t type);
+u_int8_t *next_turn(u_int8_t player_id);
 #endif //CPROJ_MESSAGE_HELPER_H

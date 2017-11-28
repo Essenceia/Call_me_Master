@@ -26,6 +26,7 @@ typedef enum MESSAGE_TYPE {
     STATUS_1 = 0x06,
     STATIS_2 = 0x07,
     CONTROL = 0x08,
+    SKIP_TURN = 0x09,//todo - change
     PLAYER_OK =(u_int8_t) 0x10,
 
 };

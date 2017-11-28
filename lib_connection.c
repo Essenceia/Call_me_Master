@@ -5,10 +5,18 @@
 #include "lib_connection.h"
 #include "connection_base_struct.h"
 #include "message_helper.h"
+#include "message_defines.h"
 #include<arpa/inet.h> //inet_addr
 #include<string.h>    //strlen
 #include <stdio.h>
+#include <unistd.h>
 #define WAIT_FOR_ALL
+typedef struct TUBE{
+    u_int8_t *tobesent;
+    size_t msglng;
+    u_int8_t active;
+};
+static struct TUBE message_share[3];
 static u_int16_t game_step;
 const enum CLIENT_LIST Play_order[2]={BP,WP};
 
@@ -36,7 +44,6 @@ void player_handler(void* player, int socket){
     //send ok message
     u_int8_t *buf,msgsize;
     u_int8_t *send_msg = msg_ok(Player->client_type);
-
     ssize_t sendres= send(socket,send_msg,5,0);
     free(send_msg);
     printf("INFO_%d: Message OK send to client with result %u \n",getpid(),sendres);
@@ -58,13 +65,48 @@ void player_handler(void* player, int socket){
         if(Play_order[(game_step%2)]==Player->client_type){
             //send New move
             printf("INFO_%d:Out turn to play\n",getpid());
+            //send turn message
+            //todo - get turn message from game client
 
             //todo start timeout counter
 
-            //wait for move
-            recv(socket, buf ,msgsize ,0);
+            //wait for move recived
+            Player->rev_msg = recive_msg(socket);
+            if(Player->rev_msg!= NULL){
 
-            //check move
+                if(Player->rev_msg->type == NEW_MOVE) {
+                    //check move - send to controller
+
+                    buf = (u_int8_t *) malloc(sizeof(u_int8_t) * 3);
+                    buf[0] = Player->client_type;
+                    memcpy((buf + 1), Player->rev_msg->msg, 2);
+                    send_msg = prepare_message(NEW_MOVE, buf, 3);
+                    message_share[GC].tobesent = send_msg;
+                    message_share[GC].msglng = 3 + 4;
+                    message_share[GC].active = 1;
+                    free(buf);
+
+                    //wait untill we get a responsse from the game clontroller
+                    while (!(message_share[Player->client_type].active)) {
+                        sleep(1);
+                        printf("INFO_%d:Player waiting for client response");
+                    }
+                    //have recived message from client - send allong
+                    if (send(socket, message_share[Player->client_type].tobesent,
+                             message_share[Player->client_type].msglng, 0) >= 0) {
+                        //we have succesfully forwarded message
+                        printf("INFO_%d:Message sucessfully forwarded \n");
+                        game_step++; // incremement set to next player
+
+                    }else{
+                     printf("ERRO_%d:Error in message forwarding\n");
+                    }
+
+                }
+
+
+            }
+
         }
     }
     unregister_client(Player->client_type);
@@ -77,8 +119,46 @@ void player_handler(void* player, int socket){
  *
  */
 void gclient_handler(void *controler,int socket){
+    //declare ressources
+    struct comm_message *send_msg;
+    struct connection_base *Contro = (struct connection_base*)controler;
+    //init tube as unactive
+    message_share[0].active = 0;
+    message_share[1].active = 0;
+    message_share[2].active = 0;
+    enum CLIENT_LIST player;
     //set game counter to zero
     game_step = 0;
+    while(!GAME_OVER){
+        if(message_share[GC].active){
+         //we want to share data to the client
+            if(send(socket,message_share[GC].tobesent,message_share->msglng,0)>=0){
+                printf("INFO_%d:Message sucessfully sent to client \n",getpid());
+                message_share[GC].active = 0;
+                free(message_share[GC].tobesent);
+            }else{
+                printf("ERRO_%d:Failed to send msg to client\n",getpid());
+            }
+
+        }
+        //check if we recived new msg
+        Contro->rev_msg = recive_msg(socket);
+        if(Contro->rev_msg!= NULL){
+         //todo - check for recived messages
+            if(Contro->rev_msg->type==SKIP_TURN || Contro->rev_msg->type == OK_NOK){
+                //send message to player
+                player = Contro->rev_msg->msg[0];
+                memcpy(message_share[player].tobesent,(Contro->rev_msg->msg+1),Contro->rev_msg->mesg_lng -1 );
+                message_share[player].active = 1;
+                message_share[player].msglng = Contro->rev_msg->mesg_lng-1;
+
+            }else{
+                printf("ERRO_%d: Unexpected message recived form controller message is of type %x",getpid(),
+                Contro->rev_msg->type);
+            }destroy_msg(Contro->rev_msg);
+
+        }
+    }
 
 }
 //todo depreciate
