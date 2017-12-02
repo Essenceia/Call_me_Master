@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/NAME.dir/lib_server.c.o"
   "CMakeFiles/NAME.dir/lib_connection.c.o"
   "CMakeFiles/NAME.dir/client_registration.c.o"
+  "CMakeFiles/NAME.dir/reservsi_mecanics.c.o"
   "NAME.pdb"
   "NAME"
 )

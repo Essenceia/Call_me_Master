@@ -7,11 +7,13 @@ void warning(){
     //puts("WARN_: 10 second has passed, soon gonna die");
 }
 int main(){
-    int8_t Server_status = init_server();
+    u_int64_t test = 0ULL;
+    printf("%x",test);
+  /*  int8_t Server_status = init_server();
     printf("INFO_:INIT server status = %d\n",Server_status);
     //start server
     Server_status= run_server();
-    printf("INFO_:Server status %d\n",Server_status);
+    printf("INFO_:Server status %d\n",Server_status);*/
 
 
 }

@@ -339,6 +339,33 @@ message_parser.c.s:
 	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/message_parser.c.s
 .PHONY : message_parser.c.s
 
+reservsi_mecanics.o: reservsi_mecanics.c.o
+
+.PHONY : reservsi_mecanics.o
+
+# target to build an object file
+reservsi_mecanics.c.o:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/reservsi_mecanics.c.o
+.PHONY : reservsi_mecanics.c.o
+
+reservsi_mecanics.i: reservsi_mecanics.c.i
+
+.PHONY : reservsi_mecanics.i
+
+# target to preprocess a source file
+reservsi_mecanics.c.i:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/reservsi_mecanics.c.i
+.PHONY : reservsi_mecanics.c.i
+
+reservsi_mecanics.s: reservsi_mecanics.c.s
+
+.PHONY : reservsi_mecanics.s
+
+# target to generate assembly for a file
+reservsi_mecanics.c.s:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/reservsi_mecanics.c.s
+.PHONY : reservsi_mecanics.c.s
+
 time_keeper.o: time_keeper.c.o
 
 .PHONY : time_keeper.o
@@ -399,6 +426,9 @@ help:
 	@echo "... message_parser.o"
 	@echo "... message_parser.i"
 	@echo "... message_parser.s"
+	@echo "... reservsi_mecanics.o"
+	@echo "... reservsi_mecanics.i"
+	@echo "... reservsi_mecanics.s"
 	@echo "... time_keeper.o"
 	@echo "... time_keeper.i"
 	@echo "... time_keeper.s"

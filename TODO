@@ -1,0 +1,5 @@
+TODO:
+-modify message helper to suport comm message structure
+-take skip turn into account for player
+-fill board with udefined by default at init and then fill with blancs
+when position is defined

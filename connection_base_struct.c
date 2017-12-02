@@ -48,6 +48,7 @@ struct connection_base* init_connection(int dest_sochket){
     //default init
     printf("INFO_%d_:Connection init start",getpid());
     cbase->alive = DEAD;
+    cbase->win = WINNER;
     cbase->rev_msg = NULL;
     cbase->handler = NULL;
     cbase->dest_socket = dest_sochket;

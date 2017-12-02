@@ -41,9 +41,11 @@ CMakeFiles/NAME.dir/main.c.o: ../main.c
 CMakeFiles/NAME.dir/main.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/main.c.o: ../time_keeper.h
 
+CMakeFiles/NAME.dir/message_helper.c.o: ../board_handler.h
 CMakeFiles/NAME.dir/message_helper.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/message_helper.c.o: ../message_helper.c
 CMakeFiles/NAME.dir/message_helper.c.o: ../message_helper.h
+CMakeFiles/NAME.dir/message_helper.c.o: ../message_parser.h
 
 CMakeFiles/NAME.dir/message_parser.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/message_parser.c.o: ../message_helper.h

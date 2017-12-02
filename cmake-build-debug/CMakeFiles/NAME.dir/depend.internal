@@ -42,9 +42,11 @@ CMakeFiles/NAME.dir/main.c.o
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/message_helper.c.o
+ /home/pookie/Documents/code/C/CProj/board_handler.h
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_helper.c
  /home/pookie/Documents/code/C/CProj/message_helper.h
+ /home/pookie/Documents/code/C/CProj/message_parser.h
 CMakeFiles/NAME.dir/message_parser.c.o
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_helper.h

@@ -1,7 +1,7 @@
 #include "lib_server.h"
 #include <stdio.h>
 #include "lib_connection.h"
-#include "board_handler.h"
+#include "reservsi_mecanics.h"
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
@@ -38,7 +38,7 @@ void creat_fork(int client_socket) {
             printf("INFO_%d_:Client build success,type %x pid %d \n", getpid(), tmpbase->client_type, getpid());
             Server->cbase[tmpbase->client_type] = *(tmpbase);
             Server->childpid[tmpbase->client_type] = getpid();
-            Server->cbase[tmpbase->client_type].handler((void *) (tmpbase), client_socket);
+            Server->cbase[tmpbase->client_type].handler((void *) (tmpbase));
         } else {
             puts("WARN_:Build failed closing socket");
             close(client_socket);
@@ -54,7 +54,7 @@ int8_t init_server() {
     int buid_result;
     if (!is_init) {
         //init board
-        init_board();
+        init_game();
         //0 - Init server
         is_init =1;
         puts("INFO_:Initialising server");
@@ -153,8 +153,8 @@ int8_t close_server() {
         close(Server->socket_desc);
         //destroy child processes
         kill(0, SIGINT);
-        //destroy board
-        destroy_board();
+        //end game , destroy board
+        end_game();
         free(Server);
         return 0;
     }

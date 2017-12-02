@@ -125,10 +125,16 @@ stdio.h
 -
 unistd.h
 -
+sys/socket.h
+-
+board_handler.h
+/home/pookie/Documents/code/C/CProj/board_handler.h
 
 /home/pookie/Documents/code/C/CProj/message_helper.h
 stdlib.h
 -
+message_parser.h
+/home/pookie/Documents/code/C/CProj/message_parser.h
 
 /home/pookie/Documents/code/C/CProj/message_parser.c
 message_parser.h

@@ -13,8 +13,8 @@
 typedef void (*client_warining) (void);
 client_warining get_player_waring();
 client_warining get_gcontroler_waring();
-void player_handler(void* player,int socket);
-void gclient_handler(void *gclient,int socket);
+void player_handler(void* player);
+void gclient_handler(void *gclient);
 void *handler_connection(void* )__attribute_deprecated_msg__("depreciated todo : remove");
 void send_init_message(int socket)__attribute_deprecated_msg__("depreciated todo : remove");
 void handler_message(char *recived_message,

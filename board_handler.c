@@ -145,7 +145,7 @@ u_int8_t get_board_string_lng(){
 /*
  * Function prepares a message for both status 1 and new move
  */
-u_int8_t* prepare_msg(){
+u_int8_t* board_prepare_msg(){
     u_int8_t *msg = (u_int8_t*)malloc(sizeof(u_int8_t)*(4+Board->str_lng));
     msg[0]=Board->lastmove_x;
     msg[1]=Board->lastmove_y;
@@ -170,4 +170,10 @@ void register_new_player_move(u_int8_t player,u_int8_t x,u_int8_t y){
 void confirm_new_player_move(u_int8_t player,u_int8_t x,u_int8_t y){
    enum CELL jetton = (enum CELL)player;
     set_board(x,y,jetton);
+}
+u_int8_t get_board_msg_size(){
+    return Board->str_lng+4;
+}
+u_int8_t check_player_move(enum CELL type ,u_int8_t x,u_int8_t y){
+
 }
