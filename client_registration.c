@@ -10,6 +10,11 @@
  * 0x02 - client is connected and info can be accesed without problem
  */
 typedef enum CLIENT_STATUS {UNDEFINED = 0x00, INUSE = 0x01, FREE=0x02};
+/*client by id
+ * 0 - controller
+ * 1 - black
+ * 2 - wight
+ */
 static enum CLIENT_STATUS client_list[MAX_CLIENT_NUMBER] = {UNDEFINED,UNDEFINED,UNDEFINED};
 enum CLIENT_REGISTER_ERROR put_nv_client_reg(enum CLIENT_LIST nv){
     printf("INFO_:New client id %u\n",nv);
@@ -23,20 +28,17 @@ enum CLIENT_REGISTER_ERROR put_nv_client_reg(enum CLIENT_LIST nv){
     }
 }
 enum CLIENT_LIST register_new_client(u_int8_t * name){
-    printf("INFO_%d:Register new client name %c %c\n",getpid(),name[0],name[1]);
+    printf("INFO_%d:Register new client name %c %c\n",name[0],name[1]);
     enum CLIENT_LIST new = ERROR;
-    if(name[0]=='W'&& name[1]=='P'){
-        new = WP;
-    }else if(name[0]=='B'&&name[1]=='P'){
-        new=BP;
-    }else if(name[0]=='G'&&name[1]=='C'){
+     if(name[0]=='G'&&name[1]=='C'){
         new = GC;
-    }
-    if(new!=ERROR){
-        if(put_nv_client_reg(new)!=VALIDE_REGISTER)new=ERROR;
     }else{
-        printf("ERRO_:Error in client registration , error code %u \n",INVALIDE_NAME);
-    }
+         if(client_list[BP]==UNDEFINED){
+             new = BP;
+         }else new = WP;
+     }
+        if(put_nv_client_reg(new)!=VALIDE_REGISTER)new=ERROR;
+
     return new;
 }
 enum CLIENT_ACCES_ERROR get_acces_to_client(enum CLIENT_LIST cname){
@@ -75,6 +77,7 @@ u_int8_t has_all_clients(){
     for(int i = 0 ; i <MAX_CLIENT_NUMBER; i++){
         if(client_list[i]==UNDEFINED)ret = 0;
     }
-    printf("INFO_:Has all clients %u\n",ret);
+   // printf("INFO_:Has all clients %u\n",ret);
+    puts(".");
     return ret;
 }//check if all necessary clients are present

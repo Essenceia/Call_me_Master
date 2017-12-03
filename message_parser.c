@@ -19,11 +19,9 @@ struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
     struct comm_message *nvmsg=NULL;
     u_int8_t error = check_error(recvmsg,recvlngth);
     if(error>=0) {
-        printf("INFO_%d:No errors, have a new client\n",getpid());
         nvmsg = (struct comm_message *) malloc(sizeof(struct comm_message));
         nvmsg->type =(u_int8_t) recvmsg[OFFSET_TYPE];
         nvmsg->mesg_lng = (u_int8_t )recvmsg[OFFSET_LNGT];
-        printf("INFO_:Client type %u and lengh %u \n",nvmsg->type,nvmsg->mesg_lng);
         nvmsg->msg = (u_int8_t *)malloc(sizeof(u_int8_t)*nvmsg->mesg_lng);
         for(int i = 0 ; i < nvmsg->mesg_lng; i++){
             nvmsg->msg[i] = recvmsg[OFFSET_TYPE+1+i];
@@ -41,7 +39,7 @@ struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
     return nvmsg;
 }
 void destroy_msg(struct comm_message *tokill){
-    printf("INFO_%d:Destroying commm message\n");
+    //printf("INFO_%d:Destroying commm message\n");
     if(tokill!= NULL){
         free(tokill->msg);
         free(tokill);

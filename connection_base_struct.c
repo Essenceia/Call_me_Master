@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include "message_defines.h"
+#include <unistd.h>
 u_int8_t run_connection(struct connection_base victim);
 /*
  * Create new connection base structure - initialise a connection and find
@@ -71,10 +72,13 @@ struct connection_base* init_connection(int dest_sochket){
                     //we have a valide new client
                     cbase->alive = ALIVE;
                     cbase->clock->stop_timer;//stop counting down time
+                    cbase->client_name=(char*)malloc(sizeof(char)*cbase->rev_msg->mesg_lng-1);
+                    memcpy(cbase->client_name,cbase->rev_msg->msg+1,cbase->rev_msg->mesg_lng-1);
                     //initialise the client to it's final status
                     init_by_type(cbase);
                     returnstruct = cbase;
                 }
+
 
 
             }else{

@@ -18,7 +18,12 @@ char check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){
     return res;
 }
 char check_type_valide(char type){
-    return (((type >=CONNECT)&&(type <=PLAYER_OK))&&(type!=UNDEFINED_TYPE));
+    if((type >=CONNECT)&&(type <=PLAYER_OK)){
+        return 1;
+    }else{
+        printf("ERRO_:Type of message is invalide errro, got type %x \n",type);
+        return 0;
+    }
 }
 //product the crc we would be expecting here
 u_int8_t get_crc(u_int8_t *appmsg,size_t alng){
@@ -71,7 +76,7 @@ u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng){
 u_int8_t *prepare_message(struct comm_message *tosend){
     printf("INFO_%d:Preparing message of type 0x%x , length %u\n",getpid(),tosend->type,tosend->mesg_lng);
     u_int8_t *repared=NULL;
-    if(tosend->mesg_lng>0 && check_type_valide(tosend->mesg_lng)) {
+    if(tosend->mesg_lng>=0 && check_type_valide(tosend->type)) {
         repared = (u_int8_t *) malloc(sizeof(CONTROLBLOCKSIZE + tosend->mesg_lng));
         repared[OFFSET_SYNC] = BLOCK_SYNC;
         repared[OFFSET_TYPE] = tosend->type;
@@ -94,6 +99,8 @@ u_int8_t *prepare_message(struct comm_message *tosend){
 int8_t sendof(int socket,struct comm_message* tosend){
     int8_t retv =0;
     u_int8_t *officle_msg=prepare_message(tosend);
+    printf("INFO_%d:Sending msg :\n",getpid());
+
     if(send(socket,officle_msg,tosend->mesg_lng + 4,0)==-1){
         printf("ERRO_:%d Message send failed\n",getpid());
         perror("ERRO_:Sending message failed reason");
@@ -103,6 +110,7 @@ int8_t sendof(int socket,struct comm_message* tosend){
     destroy_msg(tosend);
     return retv;
 }
+/*
 void msg_player_ok(u_int8_t playertype, int socket){
     struct comm_message *nwmsg=(struct comm_message*)malloc(sizeof(struct comm_message));
     u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
@@ -112,14 +120,28 @@ void msg_player_ok(u_int8_t playertype, int socket){
     nwmsg->type=PLAYER_OK;
     nwmsg->msg=msg;
     sendof(socket,nwmsg);
+}*/
+void msg_player_ok(u_int8_t oknok,int socket){
+    struct comm_message *nwmsg=(struct comm_message*)malloc(sizeof(struct comm_message));
+    u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
+    if(oknok!=0x01 && oknok!=0x02){
+        printf("ERRO_%d:Ok Nok value is wrong , value got %x\n",getpid(),oknok);
+        oknok = 0x01;
+    }
+    msg[0]=oknok;
+    nwmsg->mesg_lng=1;
+    nwmsg->type=PLAYER_OK;
+    nwmsg->msg=msg;
+    sendof(socket,nwmsg);
 }
+/*
 void next_turn(int socket){
     struct comm_message* tosend = (struct comm_message*)malloc(sizeof(struct comm_message));
     tosend->msg=board_prepare_msg();
     tosend->mesg_lng=get_board_msg_size();
     tosend->type=NEXT_TURN;
     sendof(socket,tosend);
-}
+}*/
 /*void msg_ok_nok(u_int8_t socket,u_int8_t oknok){
     u_int8_t *to_send,buf[1];
     buf[0]=oknok;

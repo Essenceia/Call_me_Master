@@ -23,15 +23,16 @@ CMakeFiles/NAME.dir/lib_connection.c.o
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_helper.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
+ /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/lib_server.c.o
- /home/pookie/Documents/code/C/CProj/board_handler.h
  /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/connection_base_struct.h
  /home/pookie/Documents/code/C/CProj/lib_connection.h
  /home/pookie/Documents/code/C/CProj/lib_server.c
  /home/pookie/Documents/code/C/CProj/lib_server.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
+ /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/main.c.o
  /home/pookie/Documents/code/C/CProj/client_registration.h
@@ -42,7 +43,6 @@ CMakeFiles/NAME.dir/main.c.o
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/message_helper.c.o
- /home/pookie/Documents/code/C/CProj/board_handler.h
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_helper.c
  /home/pookie/Documents/code/C/CProj/message_helper.h
@@ -52,6 +52,14 @@ CMakeFiles/NAME.dir/message_parser.c.o
  /home/pookie/Documents/code/C/CProj/message_helper.h
  /home/pookie/Documents/code/C/CProj/message_parser.c
  /home/pookie/Documents/code/C/CProj/message_parser.h
+CMakeFiles/NAME.dir/reservsi_mecanics.c.o
+ /home/pookie/Documents/code/C/CProj/board_handler.h
+ /home/pookie/Documents/code/C/CProj/client_registration.h
+ /home/pookie/Documents/code/C/CProj/message_defines.h
+ /home/pookie/Documents/code/C/CProj/message_helper.h
+ /home/pookie/Documents/code/C/CProj/message_parser.h
+ /home/pookie/Documents/code/C/CProj/reservsi_mecanics.c
+ /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
 CMakeFiles/NAME.dir/time_keeper.c.o
  /home/pookie/Documents/code/C/CProj/time_keeper.c
  /home/pookie/Documents/code/C/CProj/time_keeper.h

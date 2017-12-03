@@ -5,10 +5,14 @@
 #ifndef CPROJ_RESERVSI_MECANICS_H
 #define CPROJ_RESERVSI_MECANICS_H
 
-#include "message_parser.h
-void init_game();
-struct comm_message* check_player_move(u_int8_t player,u_int8_t x,u_int8_t y);
-struct comm_message* new_move_for_player(u_int8_t player);
-void end_game();
+#include "message_parser.h"
+#include "client_registration.h"
 
+void init_game();
+u_int8_t check_player_move(int socket,enum CLIENT_LIST player,struct comm_message* player_sent_move);
+u_int8_t new_move_for_player(int socket,enum CLIENT_LIST player);
+u_int8_t send_status(int socket);
+void end_game();
+u_int8_t is_game_over();
+void send_game_end(int socket);
 #endif //CPROJ_RESERVSI_MECANICS_H
