@@ -27,7 +27,7 @@ void warn_server() {
 void creat_fork(int client_socket) {
     //int* new_socket = (int*)malloc(sizeof(client_socket));
     int new_socket = client_socket;
-    struct connection_base *tmpbase;
+    connection_base *tmpbase;
     pid_t child_pid = fork();
     if (child_pid == 0) {
         puts("INFO_:Fork created sucess");
@@ -39,6 +39,8 @@ void creat_fork(int client_socket) {
             Server->cbase[tmpbase->client_type] = *(tmpbase);
             Server->childpid[tmpbase->client_type] = getpid();
             Server->cbase[tmpbase->client_type].handler((void *) (tmpbase));
+
+
         } else {
             puts("WARN_:Build failed closing socket");
             close(client_socket);
@@ -60,7 +62,7 @@ int8_t init_server() {
         puts("INFO_:Initialising server");
         signal(SIGINT, kill_handler);
         GAME_OVER = 0;
-        Server = (struct server_struct *) malloc(sizeof(struct server_struct));
+        Server = (server_struct *) malloc(sizeof(server_struct));
         Server->socket_desc = socket(AF_INET, SOCK_STREAM, 0);
         if (Server->socket_desc == -1) {
             printf("Server :: ERROR : unable to create socket. \n", 0);

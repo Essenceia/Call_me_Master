@@ -8,7 +8,7 @@
 #include "message_defines.h"
 #include <unistd.h>
 #define DEBUG
-struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
+comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
 #ifdef DEBUG
     printf("INFO_%d: Recived message length %u: \n",getpid(),recvlngth);
     for(int i = 0 ; i < recvlngth; i++){
@@ -16,10 +16,10 @@ struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
     }
     printf("\n");
 #endif
-    struct comm_message *nvmsg=NULL;
+    comm_message *nvmsg=NULL;
     u_int8_t error = check_error(recvmsg,recvlngth);
     if(error>=0) {
-        nvmsg = (struct comm_message *) malloc(sizeof(struct comm_message));
+        nvmsg = (comm_message *) malloc(sizeof(comm_message));
         nvmsg->type =(u_int8_t) recvmsg[OFFSET_TYPE];
         nvmsg->mesg_lng = (u_int8_t )recvmsg[OFFSET_LNGT];
         nvmsg->msg = (u_int8_t *)malloc(sizeof(u_int8_t)*nvmsg->mesg_lng);
@@ -38,7 +38,7 @@ struct comm_message* parse_recv_msg(u_int8_t * recvmsg, ssize_t recvlngth){
     }
     return nvmsg;
 }
-void destroy_msg(struct comm_message *tokill){
+void destroy_msg(comm_message *tokill){
     //printf("INFO_%d:Destroying commm message\n");
     if(tokill!= NULL){
         free(tokill->msg);

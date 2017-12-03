@@ -14,20 +14,20 @@ typedef enum CONNECTION_LIFE {ALIVE=0xff, DEAD=0x00};
 typedef enum LOSER_WINNER {LOSER = 0x00, WINNER = 0xff};
 typedef void (*msg_handler)(void*);
 static u_int8_t GAME_OVER;
-typedef struct connection_base{
-    struct TimeKeeper *clock;
+typedef struct {
+    TimeKeeper *clock;
     int dest_socket;//destination socket
-    struct comm_message* rev_msg;
-    struct comm_message* tosend_msg;
+    comm_message* rev_msg;
+    comm_message* tosend_msg;
     char *client_name;
     enum CLIENT_LIST client_type;
     enum CONNECTION_LIFE alive;
     enum LOSER_WINNER win;
     msg_handler handler;
-};
+}connection_base;
 
-u_int8_t run_connection(struct connection_base victim);
+u_int8_t run_connection(connection_base victim);
 
-struct connection_base* init_connection(int dest_sochket);
-void destroy_connection_base(struct connection_base *tokill);
+connection_base* init_connection(int dest_sochket);
+void destroy_connection_base(connection_base *tokill);
 #endif //CPROJ_CONNECTION_BASE_STRUCT_H

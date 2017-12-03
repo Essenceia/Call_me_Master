@@ -17,7 +17,7 @@
 typedef struct TUBE {
     //u_int8_t *tobesent;
     //size_t msglng;
-    struct comm_message *tosend;
+    comm_message *tosend;
     u_int8_t active;
 };
 static struct TUBE message_share[3];
@@ -48,7 +48,12 @@ client_warining get_gcontroler_waring() {
 void player_handler(void *player) {
     printf("INFO_%d:Starting client handler\n", getpid());
     u_int8_t max_wait_time = 0;
-    struct connection_base *Player = (struct connection_base *) player;
+    connection_base *Player = (connection_base *) player;
+    Player->clock=init_TimeKeeper(30);
+    //set timeout on socket opperations
+    struct timeval tv = {1, 0};
+    setsockopt(Player->dest_socket, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
+
     //send ok message
     msg_player_ok(Player->client_type, Player->dest_socket);
     //check everbody is connected
@@ -75,72 +80,41 @@ void player_handler(void *player) {
             if (new_move_for_player(Player->dest_socket, Player->client_type)) {
 
                 //todo start timeout counter
+                timer_start(Player->clock);
+
 
                 //wait for move recived
-                Player->rev_msg = recive_msg(Player->dest_socket);
-                if (Player->rev_msg != NULL) {
-                    if (Player->rev_msg->type == NEW_MOVE) {
+                while(timer_check_elapsed_time(Player->clock)==TIMER_COUNTING) {
+                    sleep(1);
+                    Player->rev_msg = recive_msg(Player->dest_socket);
+                    if (Player->rev_msg != NULL) {
+                        timer_stop(Player->clock);
+                        if (Player->rev_msg->type == NEW_MOVE) {
 
-                        switch (check_player_move(Player->dest_socket, Player->client_type, Player->rev_msg)) {
-                            case 0x01:
-                                printf("INFO_%d:Move recived from player %s is valide\n", getpid(),
-                                       Player->client_name);
-                                break;
-                            case 0x00:
-                                printf("ERRO_%d:Move recived from player %s is NOT valide\n", getpid(),
-                                       Player->client_name);
-                                Player->win = LOSER;
-                                Player->alive=DEAD;
-                                GAME_OVER = 1;
-                                break;
-                            default:
-                                printf("ERRO_%d:Lookes like something went very wring with move check, ending game\n",getpid());
-                                GAME_OVER = 1;
-                                break;
+                            switch (check_player_move(Player->dest_socket, Player->client_type, Player->rev_msg)) {
+                                case 0x01:
+                                    printf("INFO_%d:Move recived from player %s is valide\n", getpid(),
+                                           Player->client_name);
+                                    break;
+                                case 0x00:
+                                    printf("ERRO_%d:Move recived from player %s is NOT valide\n", getpid(),
+                                           Player->client_name);
+                                    Player->win = LOSER;
+                                    Player->alive = DEAD;
+                                    GAME_OVER = 1;
+                                    break;
+                                default:
+                                    printf("ERRO_%d:Lookes like something went very wring with move check, ending game\n",
+                                           getpid());
+                                    GAME_OVER = 1;
+                                    break;
+                            }
                         }
                     }
+                }if(timer_check_elapsed_time(Player->clock)==TIMER_OVERFLOW){
+                    Player->win=LOSER;
+                    Player->alive=DEAD;
                 }
-                /*if(Player->rev_msg!= NULL){
-                    //we just recived a message from the client with the new turn
-                    if(Player->rev_msg->type == NEW_MOVE) {
-                        //todo stop timer
-                        //check move - send to controller
-                        message_share[GC].tosend =recapsulate_for_controller(Player->rev_msg,Player->client_type);
-                        message_share[GC].active = 1;
-
-
-                        //wait untill we get a responsse from the game clontroller
-                        while (!(message_share[Player->client_type].active)) {
-                            sleep(1);
-                            printf("INFO_%d:Player waiting for client response");
-                        }
-                        //have recived message from client - send allong
-                        message_share[Player->client_type].active=0;
-                        Player->tosend_msg = message_share[Player->client_type].tosend;
-                        switch (Player->tosend_msg->type){
-                            case OK_NOK:
-                                if(Player->tosend_msg->msg[0]==0){
-                                    GAME_OVER = 1;
-                                    Player->win=LOSER;
-                                }
-                                //increment play step and give hand to next player
-                                break;
-                            case SKIP_TURN:
-                                //todo tel player to skip it's turn
-                                printf("INFO_%d:Player %x will be skipping his turn on next round\n",getpid(),
-                                Player->client_type);
-                                break;
-                        }
-                        //send allong
-                        if(sendof(Player->dest_socket,Player->tosend_msg)<0){
-                            Player->win=LOSER;
-                            Player->alive =DEAD;
-                            GAME_OVER=1;
-                            printf("ERRO_%d:Error sending packet player %x eliminates\n",getpid(),
-                            Player->client_type);
-                        }
-
-                    }*/
             }
             game_step++;
         }
@@ -152,13 +126,6 @@ void player_handler(void *player) {
     unregister_client(Player->client_type);
     destroy_connection_base(Player);
 }
-//destroy_connection_base(Player);
-
-//unregister_client(Player->client_type);
-//autodestruction
-//destroy_connection_base(Player);
-
-
 /*
  * todo - implement
  * Connection handler for Game Controller
@@ -166,7 +133,7 @@ void player_handler(void *player) {
  */
 void gclient_handler(void *controler) {
     //declare ressources
-    struct connection_base *Contro = (struct connection_base *) controler;
+    connection_base *Contro = (connection_base *) controler;
     //set game counter to zero
     game_step = 0;
     u_int16_t previous_step = game_step;
@@ -180,10 +147,11 @@ void gclient_handler(void *controler) {
     destroy_connection_base(Contro);
 
 }
-struct comm_message *recive_msg(int socket) {
+comm_message *recive_msg(int socket) {
     u_int8_t *recv_msg;
     recv_msg = (u_int8_t *) malloc(sizeof(u_int8_t) * MAX_CLIENT_MESSAGE_SIZE);
-    struct comm_message *recvcom = NULL;
+    comm_message *recvcom = NULL;
+
     ssize_t size_msg = recv(socket, recv_msg, MAX_CLIENT_MESSAGE_SIZE, 0);
     if (size_msg > 0) {
         recvcom = parse_recv_msg(recv_msg, size_msg);

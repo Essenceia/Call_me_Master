@@ -8,7 +8,7 @@
 #include "board_handler.h"
 #include <unistd.h>
 
-#define DEBUG
+//#define DEBUG
 static board *Board;
 
 void showbits(unsigned int x) {
@@ -26,9 +26,11 @@ enum CELL show_at_value(u_int8_t x, u_int8_t y) {
     val = Board->board_str[relindex];
     offset = 3 - absindex % 4;
     buffer = ((u_int8_t) val >> offset * 2);
+#ifdef DEBUG
     //printf("INFO:Board geetting value coord x:%d,y:%d,value found :\n",x,y);
     //showbits((0x03&buffer));
     printf("INFO_%d:CELL at coord x:%x y:%x has value %x", getpid(), x, y, (0x03 & buffer));
+#endif
     return (enum CELL) (0x03 & buffer);
 }
 
@@ -38,14 +40,7 @@ u_int16_t gbIx(u_int8_t x, u_int8_t y) {
 }
 
 void print_board() {
-/*
-        printf("INFO_: Board view enum: \n");
-        for(u_int8_t i = 0 ; i < Board->board_size_x ; i++){
-            for(u_int8_t j = 0 ; j < Board->board_size_y ; j++) {
-                printf(".%x",(u_int8_t )Board->board[gbIx(j,i)]);
-            }
-            printf("\n");
-            }*/
+
     printf("INFO_: Board view enum: \n");
     for (u_int8_t i = 0; i < Board->board_size_x; i++) {
         for (u_int8_t j = 0; j < Board->board_size_y; j++) {
@@ -116,8 +111,10 @@ void set_board(u_int8_t x, u_int8_t y, enum CELL val) {
     u_int8_t offset;
     u_int8_t relindex;
     if (x < Board->board_size_x && y < Board->board_size_y) {
+//#ifdef DEBUG
         printf("INFO_:Board settinf up board cell x :%x y:%x to value 0x%x\n",
                x, y, val);
+//#endif
         //enum
         absindex = gbIx(x, y);
         //Board->board[absindex]= val;
@@ -129,10 +126,11 @@ void set_board(u_int8_t x, u_int8_t y, enum CELL val) {
         newval = Board->board_str[relindex];
         newval = (newval & ~mask) | buffer;
 
-#ifdef DEBUG
-        print_board();
-#endif
+
         Board->board_str[relindex] = newval;
+        //#ifdef DEBUG
+        print_board();
+//#endif
     } else {
         printf("ERRO_:Tying to wright to unused board sector x %u y %u\n", x, y);
     }
@@ -196,7 +194,9 @@ enum CELL get_couleur_adverse(u_int8_t player) {
             printf("ERRO_:Unknown player type %x \n", player);
             break;
     }
+#ifdef DEBUG
     printf("INFO_%d,Other Player color %x\n", getpid(), retval);
+#endif
     return retval;
 }
 
@@ -213,6 +213,8 @@ enum CELL get_couleur_joueur(u_int8_t player) {
             printf("ERRO_:Unknown player type %x \n", player);
             break;
     }
+#ifdef DEBUG
     printf("INFO_%d,Our color %x\n", getpid(), retval);
+#endif
     return retval;
 }

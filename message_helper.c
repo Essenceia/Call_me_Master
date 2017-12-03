@@ -73,8 +73,10 @@ u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng){
     }
     return error;
 }
-u_int8_t *prepare_message(struct comm_message *tosend){
+u_int8_t *prepare_message(comm_message *tosend){
+#ifdef DEBUG
     printf("INFO_%d:Preparing message of type 0x%x , length %u\n",getpid(),tosend->type,tosend->mesg_lng);
+#endif
     u_int8_t *repared=NULL;
     if(tosend->mesg_lng>=0 && check_type_valide(tosend->type)) {
         repared = (u_int8_t *) malloc(sizeof(CONTROLBLOCKSIZE + tosend->mesg_lng));
@@ -96,23 +98,26 @@ u_int8_t *prepare_message(struct comm_message *tosend){
     return repared;
 
 }
-int8_t sendof(int socket,struct comm_message* tosend){
+int8_t sendof(int socket,comm_message* tosend){
     int8_t retv =0;
     u_int8_t *officle_msg=prepare_message(tosend);
-    printf("INFO_%d:Sending msg :\n",getpid());
 
-    if(send(socket,officle_msg,tosend->mesg_lng + 4,0)==-1){
-        printf("ERRO_:%d Message send failed\n",getpid());
-        perror("ERRO_:Sending message failed reason");
-        retv= -1;
+    if(officle_msg!=NULL) {
+        if (send(socket, officle_msg, tosend->mesg_lng + CONTROLBLOCKSIZE, 0) == -1) {
+            printf("ERRO_:%d Message send failed\n", getpid());
+            perror("ERRO_:Sending message failed reason");
+            retv = -1;
+        }
+        free(officle_msg);
+    }else{
+        printf("ERRO_%d:Our message had problemes in preperation\n",getpid());
     }
-    free(officle_msg);
     destroy_msg(tosend);
     return retv;
 }
 /*
 void msg_player_ok(u_int8_t playertype, int socket){
-    struct comm_message *nwmsg=(struct comm_message*)malloc(sizeof(struct comm_message));
+    comm_message *nwmsg=(comm_message*)malloc(sizeof(comm_message));
     u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
     msg[0]=((playertype==0x01)?0x01:0x02);//if type == BP
     printf("INFO_%d:Client type %o",getpid(),playertype);
@@ -121,22 +126,32 @@ void msg_player_ok(u_int8_t playertype, int socket){
     nwmsg->msg=msg;
     sendof(socket,nwmsg);
 }*/
-void msg_player_ok(u_int8_t oknok,int socket){
-    struct comm_message *nwmsg=(struct comm_message*)malloc(sizeof(struct comm_message));
+void msg_player_ok(u_int8_t player,int socket){
+    comm_message *nwmsg=(comm_message*)malloc(sizeof(comm_message));
     u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
-    if(oknok!=0x01 && oknok!=0x02){
-        printf("ERRO_%d:Ok Nok value is wrong , value got %x\n",getpid(),oknok);
-        oknok = 0x01;
+    if(player!=0x01 && player!=0x02){
+        printf("ERRO_%d:Ok Nok value is wrong , value got %x\n",getpid(),player);
+        player = 0x01;
     }
-    msg[0]=oknok;
+    msg[0]=player;
     nwmsg->mesg_lng=1;
     nwmsg->type=PLAYER_OK;
     nwmsg->msg=msg;
     sendof(socket,nwmsg);
 }
+void msg_oknok(u_int8_t oknok, int socket){
+    comm_message *nwmsg=(comm_message*)malloc(sizeof(comm_message));
+    u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
+    msg[0]=oknok;
+    nwmsg->mesg_lng=1;
+    nwmsg->type=OK_NOK;
+    nwmsg->msg=msg;
+    sendof(socket,nwmsg);
+}
+
 /*
 void next_turn(int socket){
-    struct comm_message* tosend = (struct comm_message*)malloc(sizeof(struct comm_message));
+    comm_message* tosend = (comm_message*)malloc(sizeof(comm_message));
     tosend->msg=board_prepare_msg();
     tosend->mesg_lng=get_board_msg_size();
     tosend->type=NEXT_TURN;
@@ -149,7 +164,7 @@ void next_turn(int socket){
     sendof(socket,to_send,1+4);
     free(to_send);
 }*/
-struct comm_message* recapsulate_for_player(struct comm_message *to_recapsulate){
+comm_message* recapsulate_for_player(comm_message *to_recapsulate){
     //remove client number in message
     u_int8_t *new_message = (u_int8_t*)malloc(sizeof(u_int8_t)*to_recapsulate->mesg_lng-1);
     for (u_int8_t i = 0; i < to_recapsulate->mesg_lng-1 ; ++i) {
@@ -161,7 +176,7 @@ struct comm_message* recapsulate_for_player(struct comm_message *to_recapsulate)
     return to_recapsulate;
 }
 
-struct comm_message* recapsulate_for_controller(struct comm_message *sendtoclient, u_int8_t client_id){
+comm_message* recapsulate_for_controller(comm_message *sendtoclient, u_int8_t client_id){
     u_int8_t *newmsg = (u_int8_t*)malloc(sizeof(u_int8_t)*(sendtoclient->mesg_lng+1));
     newmsg[0]=client_id;
     for(u_int8_t i = 1 ; i < sendtoclient->mesg_lng; i++){

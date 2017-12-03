@@ -6,7 +6,7 @@
 #include "reservsi_mecanics.h"
 #include "message_defines.h"
 #include "message_helper.h"
-
+#define DEBUG
 static enum CELL turn;
 #define STARTING_PLAYER ((enum CELL)WHITE)
 /*Decalrations
@@ -32,7 +32,7 @@ static u_int8_t check_can_player_play(enum CLIENT_LIST player){
  */
 static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y){
     u_int8_t nmbrflips = 0;
-    if(x<=get_size_x()&&y<=get_size_y()&&x>=0&& y>=0){
+    if(x<=get_size_x()&&y<=get_size_y()&&x>=0&& y>=0&&(show_at_value((u_int8_t) x,(u_int8_t)y))!=EMPTY){
         nmbrflips +=flip(player,x,y,-1,-1);
         nmbrflips +=flip(player,x,y,-1,0);
         nmbrflips +=flip(player,x,y,-1,+1);
@@ -57,7 +57,10 @@ static u_int8_t flip(u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
         if (adversaire == etudier){ // The bit belongs to the opponent
             possibilite++;
         //filp la case
-        set_board(i,j,coljoueur);}
+#ifdef DEBUG
+            printf("INFO_:Found something to flip x:%x y:%x to col %x\n",i,j,coljoueur);
+#endif
+        set_board((u_int8_t )i,(u_int8_t )j,coljoueur);}
         else if (coljoueur == etudier) // The bit belongs to the player
             return possibilite; // All possible flips become real flips
         else // The bit belongs to no player
@@ -81,7 +84,7 @@ void init_game(){
  * - ok   0x01
  * - nok  0x00
  */
-u_int8_t check_player_move(int socket,enum CLIENT_LIST player,struct comm_message * recvmsg){
+u_int8_t check_player_move(int socket,enum CLIENT_LIST player,comm_message * recvmsg){
     u_int8_t oknok = 0x00;//not okay by default
     int8_t x,y;
     x=recvmsg->msg[0];
@@ -89,9 +92,10 @@ u_int8_t check_player_move(int socket,enum CLIENT_LIST player,struct comm_messag
     //send comm to player
     if(check_move_valide( player , x,y)){
         oknok=0x01;
+        set_board(x,y,get_couleur_joueur(player));
         register_new_player_move(player,x,y);
     }
-    msg_player_ok(oknok,socket);
+    msg_oknok(oknok,socket);
     return oknok;
 }
 void end_game(){
@@ -104,7 +108,7 @@ void end_game(){
  */
 u_int8_t new_move_for_player(int socket,enum CLIENT_LIST player){
     u_int8_t can_play=check_can_player_play(player) ;
-    struct comm_message* newmsg = (struct comm_message*)malloc(sizeof(struct comm_message));
+    comm_message* newmsg = (comm_message*)malloc(sizeof(comm_message));
     newmsg->msg=board_prepare_msg();
     //todo verifiy might be not +4
     newmsg->mesg_lng=get_board_string_lng()+4;
@@ -126,14 +130,14 @@ u_int8_t new_move_for_player(int socket,enum CLIENT_LIST player){
  *      -status2 nope
  */
 u_int8_t send_status(int socket) {
-    struct comm_message *nvmsg = (struct comm_message *) malloc(sizeof(struct comm_message));
+    comm_message *nvmsg = (comm_message *) malloc(sizeof(comm_message));
     nvmsg->type = STATUS_1;
     nvmsg->msg = board_prepare_msg();
     nvmsg->mesg_lng =get_board_msg_size();
     sendof(socket,nvmsg);
 }
 void send_game_end(int socket){
-    struct comm_message *nvmsg = (struct comm_message *) malloc(sizeof(struct comm_message));
+    comm_message *nvmsg = (comm_message *) malloc(sizeof(comm_message));
     nvmsg->type = END_MSG;
     nvmsg->msg = NULL;
     nvmsg->mesg_lng =0;

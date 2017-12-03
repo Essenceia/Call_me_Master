@@ -9,30 +9,24 @@
 #include <memory.h>
 #include "message_defines.h"
 #include <unistd.h>
-u_int8_t run_connection(struct connection_base victim);
+u_int8_t run_connection(connection_base victim);
 /*
  * Create new connection base structure - initialise a connection and find
  * witch type of client we are addressing.
  *
  */
-void init_by_type(struct connection_base *toinit){
+void init_by_type(connection_base *toinit){
     //store name in name char
     toinit->client_name =(char *)malloc(sizeof(char)*toinit->rev_msg->mesg_lng);
     memcpy(toinit->client_name,toinit->rev_msg->msg,toinit->rev_msg->mesg_lng);
     printf("INFO_%d:New client created with name %s",getpid(),toinit->client_name);
     if((toinit->client_type == WP )||(toinit->client_type==BP)){
-        toinit->clock->warn_timeout=get_player_waring();
-        toinit->clock->time_to_warn=DEFAULT_TIME_WAIT;
-        toinit->clock->time_to_die=DEFAULT_TIME_DIE;
         toinit->handler = &player_handler;
 
     }else{
-        toinit->clock->warn_timeout=get_gcontroler_waring();
         toinit->clock->time_to_warn=CONTROLER_TIME_WAIT;
-        toinit->clock->time_to_die=CONTROLER_TIME_DIE;
         toinit->handler = &gclient_handler;
     }
-    toinit->clock->reset;
 }
 void default_warn(){
     printf("INFO_%d:Default time has elapsed no connection recived from client\n",getpid());
@@ -43,8 +37,8 @@ void default_warn(){
  * We will have to change the default message warining handler and the wait
  * times accordingly.
  */
-struct connection_base* init_connection(int dest_sochket){
-    struct connection_base* returnstruct, *cbase = (struct connection_base*)malloc(sizeof(struct connection_base));
+connection_base* init_connection(int dest_sochket){
+    connection_base* returnstruct, *cbase = (connection_base*)malloc(sizeof(connection_base));
     returnstruct = NULL;
     //default init
     printf("INFO_%d_:Connection init start",getpid());
@@ -53,8 +47,6 @@ struct connection_base* init_connection(int dest_sochket){
     cbase->rev_msg = NULL;
     cbase->handler = NULL;
     cbase->dest_socket = dest_sochket;
-    cbase->clock = (struct TimeKeeper*)malloc(sizeof(struct TimeKeeper));
-    cbase->clock = init_TimeKeeper(DEFAULT_TIME_WAIT,DEFAULT_TIME_DIE,default_warn);
     //check untill max wait time has elapsed
     //while (cbase->clock->check_elapsed_time(cbase->clock)){
         printf("INFO_%d_:Wating for first client message\n",getpid());
@@ -71,7 +63,6 @@ struct connection_base* init_connection(int dest_sochket){
                     printf("INFO_%d_:we have a valide new client, type %x\n",getpid(),cbase->client_type);
                     //we have a valide new client
                     cbase->alive = ALIVE;
-                    cbase->clock->stop_timer;//stop counting down time
                     cbase->client_name=(char*)malloc(sizeof(char)*cbase->rev_msg->mesg_lng-1);
                     memcpy(cbase->client_name,cbase->rev_msg->msg+1,cbase->rev_msg->mesg_lng-1);
                     //initialise the client to it's final status
@@ -105,10 +96,9 @@ struct connection_base* init_connection(int dest_sochket){
  *  -free client name char x
  *  -close socket x
  */
-void destroy_connection_base(struct connection_base *tokill){
+void destroy_connection_base(connection_base *tokill){
     if(tokill->alive){
     if(unregister_client(tokill->client_type)!=VALIDE_ACCES)puts("ERRO_:Error in client unregistering");
-    tokill->clock->stop_timer;
     free(tokill->clock);
     destroy_msg(tokill->rev_msg);
     free(tokill->client_name);
