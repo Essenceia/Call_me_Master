@@ -204,6 +204,33 @@ connection_base_struct.c.s:
 	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/connection_base_struct.c.s
 .PHONY : connection_base_struct.c.s
 
+gams_status.o: gams_status.c.o
+
+.PHONY : gams_status.o
+
+# target to build an object file
+gams_status.c.o:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/gams_status.c.o
+.PHONY : gams_status.c.o
+
+gams_status.i: gams_status.c.i
+
+.PHONY : gams_status.i
+
+# target to preprocess a source file
+gams_status.c.i:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/gams_status.c.i
+.PHONY : gams_status.c.i
+
+gams_status.s: gams_status.c.s
+
+.PHONY : gams_status.s
+
+# target to generate assembly for a file
+gams_status.c.s:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/gams_status.c.s
+.PHONY : gams_status.c.s
+
 lib_connection.o: lib_connection.c.o
 
 .PHONY : lib_connection.o
@@ -411,6 +438,9 @@ help:
 	@echo "... connection_base_struct.o"
 	@echo "... connection_base_struct.i"
 	@echo "... connection_base_struct.s"
+	@echo "... gams_status.o"
+	@echo "... gams_status.i"
+	@echo "... gams_status.s"
 	@echo "... lib_connection.o"
 	@echo "... lib_connection.i"
 	@echo "... lib_connection.s"

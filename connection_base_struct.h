@@ -13,7 +13,6 @@
 typedef enum CONNECTION_LIFE {ALIVE=0xff, DEAD=0x00};
 typedef enum LOSER_WINNER {LOSER = 0x00, WINNER = 0xff};
 typedef void (*msg_handler)(void*);
-static u_int8_t GAME_OVER;
 typedef struct {
     TimeKeeper *clock;
     int dest_socket;//destination socket

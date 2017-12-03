@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/pookie/Documents/code/C/CProj/board_handler.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/board_handler.c.o"
   "/home/pookie/Documents/code/C/CProj/client_registration.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/client_registration.c.o"
   "/home/pookie/Documents/code/C/CProj/connection_base_struct.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/connection_base_struct.c.o"
+  "/home/pookie/Documents/code/C/CProj/gams_status.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/gams_status.c.o"
   "/home/pookie/Documents/code/C/CProj/lib_connection.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/lib_connection.c.o"
   "/home/pookie/Documents/code/C/CProj/lib_server.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/lib_server.c.o"
   "/home/pookie/Documents/code/C/CProj/main.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/main.c.o"

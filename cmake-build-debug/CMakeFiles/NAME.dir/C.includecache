@@ -56,6 +56,20 @@ message_parser.h
 client_registration.h
 /home/pookie/Documents/code/C/CProj/client_registration.h
 
+/home/pookie/Documents/code/C/CProj/gams_status.c
+memory.h
+-
+gams_status.h
+/home/pookie/Documents/code/C/CProj/gams_status.h
+board_handler.h
+/home/pookie/Documents/code/C/CProj/board_handler.h
+
+/home/pookie/Documents/code/C/CProj/gams_status.h
+stdlib.h
+-
+client_registration.h
+/home/pookie/Documents/code/C/CProj/client_registration.h
+
 /home/pookie/Documents/code/C/CProj/lib_connection.c
 lib_connection.h
 /home/pookie/Documents/code/C/CProj/lib_connection.h
@@ -77,6 +91,8 @@ reservsi_mecanics.h
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
 client_registration.h
 /home/pookie/Documents/code/C/CProj/client_registration.h
+gams_status.h
+/home/pookie/Documents/code/C/CProj/gams_status.h
 
 /home/pookie/Documents/code/C/CProj/lib_connection.h
 message_parser.h
@@ -97,6 +113,8 @@ signal.h
 -
 unistd.h
 -
+gams_status.h
+/home/pookie/Documents/code/C/CProj/gams_status.h
 
 /home/pookie/Documents/code/C/CProj/lib_server.h
 stdint.h
@@ -165,6 +183,8 @@ stdlib.h
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.c
 stdio.h
 -
+memory.h
+-
 board_handler.h
 /home/pookie/Documents/code/C/CProj/board_handler.h
 reservsi_mecanics.h
@@ -173,6 +193,10 @@ message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 message_helper.h
 /home/pookie/Documents/code/C/CProj/message_helper.h
+gams_status.h
+/home/pookie/Documents/code/C/CProj/gams_status.h
+message_parser.h
+/home/pookie/Documents/code/C/CProj/message_parser.h
 
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
 message_parser.h

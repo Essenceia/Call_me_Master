@@ -2,20 +2,24 @@
 // Created by pookie on 02/12/17.
 //
 #include <stdio.h>
+#include <memory.h>
 #include "board_handler.h"
 #include "reservsi_mecanics.h"
 #include "message_defines.h"
 #include "message_helper.h"
-#define DEBUG
+#include "gams_status.h"
+#include "message_parser.h"
+
+//#define DEBUG
 static enum CELL turn;
 #define STARTING_PLAYER ((enum CELL)WHITE)
 /*Decalrations
  * Private functions
  */
 static u_int8_t check_can_player_play(enum CLIENT_LIST player);
-static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y);
-static u_int8_t check_minim_move_valide(u_int8_t player,int8_t x , int8_t y);
-static u_int8_t flip(u_int8_t do_flip,u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
+static u_int8_t check_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y);
+static u_int8_t check_minim_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y);
+static u_int8_t flip(u_int8_t do_flip,enum CLIENT_LIST player,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
 /*Definitions
  * Private functions
  */
@@ -42,7 +46,7 @@ static u_int8_t check_can_player_play(enum CLIENT_LIST player){
     ckecked:
     return retval;
 }
-static u_int8_t check_minim_move_valide(u_int8_t player,int8_t x , int8_t y){
+static u_int8_t check_minim_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y){
     u_int8_t valide =0;
     for (int8_t dx = -1; dx < 2; dx++) {
         for (int8_t dy = -1; dy < 2; dy++) {
@@ -59,14 +63,15 @@ static u_int8_t check_minim_move_valide(u_int8_t player,int8_t x , int8_t y){
  * Returns 1 - yes move is valide
  *         0 - nope you fail
  */
-static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y){
-#ifdef DEBUG
-    printf("INFO_:Player move , x %x , y %x starting to verify validity \n",x,y);
-#endif
+static u_int8_t check_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y){
+
     u_int8_t nmbrflips = 0;
     if(has_prox_col(get_couleur_adverse(player),x,y)) {
-        if (x <= get_size_x() && y <= get_size_y() && x >= 0 && y >= 0 &&
-            (show_at_value((u_int8_t) x, (u_int8_t) y)) != EMPTY) {
+#ifdef DEBUG
+        printf("INFO_:Player move , x %x , y %x starting to verify validity \n",x,y);
+#endif
+        if (x < get_size_x() && y < get_size_y() && x >= 0 && y >= 0 &&
+            (show_at_value((u_int8_t) x, (u_int8_t) y)) ==EMPTY) {
             nmbrflips += flip(1, player, x, y, -1, -1);
             nmbrflips += flip(1, player, x, y, -1, 0);
             nmbrflips += flip(1, player, x, y, -1, +1);
@@ -80,17 +85,25 @@ static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y){
 #ifdef DEBUG
     printf("INFO_:Player move , x %x , y %x validity %x\n",x,y,nmbrflips);
 #endif
+    add_point(player,nmbrflips);
     return nmbrflips;
 }
-static u_int8_t flip(u_int8_t do_flip,u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
+static u_int8_t flip(u_int8_t do_flip,enum CLIENT_LIST joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
     u_int8_t possibilite =0;
     int8_t i = ix + dx;
     int8_t j = iy+dy;
+
     enum CELL adversaire = get_couleur_adverse(joueur);
     enum CELL coljoueur = get_couleur_joueur(joueur);
     enum CELL etudier;
+#ifdef DEBUG
+    printf("INFO_:Check if we can flip x:%x y:%x to col %x",i,j,coljoueur);
+#endif
     while ((i >= 0) && (i < get_size_x() ) && (j >= 0) && (j < get_size_y())){
-        etudier = show_at_value(i,j);
+#ifdef DEBUG
+        printf("INFO_:While loop : Check if we can flip x:%x y:%x to col %x",i,j,coljoueur);
+#endif
+        etudier = show_at_value((u_int8_t )i,(u_int8_t )j);
         if (adversaire == etudier){ // The bit belongs to the opponent
             possibilite++;
         //filp la case
@@ -152,6 +165,7 @@ printf("INFO_:Player %x can play %x\n",player,can_play);
     newmsg->msg=board_prepare_msg();
     //todo verifiy might be not +4
     newmsg->mesg_lng=get_board_string_lng()+4;
+    set_stuck_status(player,can_play);
     if(can_play!=0){
         newmsg->type=NEXT_TURN;
         turn=get_couleur_joueur(player);
@@ -170,10 +184,28 @@ printf("INFO_:Player %x can play %x\n",player,can_play);
  *      -status2 nope
  */
 u_int8_t send_status(int socket) {
+    u_int8_t length=0;
+    enum CLIENT_LIST player = BP;
     comm_message *nvmsg = (comm_message *) malloc(sizeof(comm_message));
     nvmsg->type = STATUS_1;
     nvmsg->msg = board_prepare_msg();
     nvmsg->mesg_lng =get_board_msg_size();
+    sendof(socket,nvmsg);
+    nvmsg = (comm_message *) malloc(sizeof(comm_message));
+    nvmsg->msg=(u_int8_t*)malloc(sizeof(u_int8_t)*get_status_length());
+    nvmsg->type=STATIS_2;
+    for(u_int8_t i =0 ; i <2 ; i++){
+        nvmsg->msg[length++]=get_points(player);
+        nvmsg->msg[length++]=30;//todo pass timer ...
+        nvmsg->msg[length++]=30;
+        nvmsg->msg[length++]=get_name_length(player);
+        if(get_name_length(player)){
+            memcpy(&nvmsg->msg[length+1],get_name(player),get_name_length(player));
+            length+=get_name_length(player);
+        }
+        player=WP;
+    }
+    nvmsg->mesg_lng=length;
     sendof(socket,nvmsg);
 }
 void send_game_end(int socket){

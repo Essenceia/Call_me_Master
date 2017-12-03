@@ -36,7 +36,7 @@ u_int8_t has_prox_col(enum CELL prox_col,u_int8_t x,u_int8_t y);//check if we ha
 void update_prox_col(enum CELL prox_col,u_int8_t x,u_int8_t y);//update status of proximity bits when we set a new cell value
 enum CELL show_at_value(u_int8_t x, u_int8_t y);
 enum CELL get_couleur_joueur(u_int8_t player);
-
+void print_board();
 enum CELL get_couleur_adverse(u_int8_t player);
 u_int8_t get_size_x();
 u_int8_t get_size_y();

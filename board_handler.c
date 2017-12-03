@@ -32,7 +32,7 @@ enum CELL show_at_value(u_int8_t x, u_int8_t y) {
 #ifdef DEBUG_SUPER
     //printf("INFO:Board geetting value coord x:%d,y:%d,value found :\n",x,y);
     //showbits((0x03&buffer));
-    printf("INFO_%d:CELL at coord x:%x y:%x has value %x", getpid(), x, y, (0x03 & buffer));
+    printf("INFO_%d:CELL at coord x:%x y:%x has value %x\n", getpid(), x, y, (0x03 & buffer));
 #endif
     return (enum CELL) (0x03 & buffer);
 }
@@ -142,6 +142,7 @@ void set_board(u_int8_t x, u_int8_t y, enum CELL val) {
         Board->board_str[relindex] = newval;
         update_prox_col(val,x,y);
 #ifdef DEBUG
+        printf("INFO_:Have just updated board\n");
         print_board();
 #endif
     } else {

@@ -100,6 +100,12 @@
 		<Unit filename="/home/pookie/Documents/code/C/CProj/connection_base_struct.h">
 			<Option target="NAME"/>
 		</Unit>
+		<Unit filename="/home/pookie/Documents/code/C/CProj/gams_status.c">
+			<Option target="NAME"/>
+		</Unit>
+		<Unit filename="/home/pookie/Documents/code/C/CProj/gams_status.h">
+			<Option target="NAME"/>
+		</Unit>
 		<Unit filename="/home/pookie/Documents/code/C/CProj/lib_connection.c">
 			<Option target="NAME"/>
 		</Unit>

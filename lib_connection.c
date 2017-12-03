@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include "reservsi_mecanics.h"
 #include "client_registration.h"
-
+#include "gams_status.h"
 //#define WAIT_FOR_ALL
 typedef struct TUBE {
     //u_int8_t *tobesent;
@@ -67,7 +67,7 @@ void player_handler(void *player) {
     //game
     while (Player->alive == ALIVE && (!GAME_OVER) && has_all_clients())
 #else
-        while (Player->alive==ALIVE && (!GAME_OVER) )
+        while (Player->alive==ALIVE && (!is_game_over()) )
 #endif
         {
         //check if our turn
@@ -101,12 +101,12 @@ void player_handler(void *player) {
                                            Player->client_name);
                                     Player->win = LOSER;
                                     Player->alive = DEAD;
-                                    GAME_OVER = 1;
+                                    set_game_over();
                                     break;
                                 default:
                                     printf("ERRO_%d:Lookes like something went very wring with move check, ending game\n",
                                            getpid());
-                                    GAME_OVER = 1;
+                                    set_game_over();
                                     break;
                             }
                         }
@@ -137,7 +137,7 @@ void gclient_handler(void *controler) {
     //set game counter to zero
     game_step = 0;
     u_int16_t previous_step = game_step;
-   while ((!GAME_OVER) && has_all_clients()){
+   while ((!is_game_over()) && has_all_clients()){
         sleep(2);
        if(previous_step!=game_step){
            //send statup1 to controller

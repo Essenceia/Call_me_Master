@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/NAME.dir/main.c.o"
+  "CMakeFiles/NAME.dir/gams_status.c.o"
   "CMakeFiles/NAME.dir/board_handler.c.o"
   "CMakeFiles/NAME.dir/message_helper.c.o"
   "CMakeFiles/NAME.dir/message_parser.c.o"

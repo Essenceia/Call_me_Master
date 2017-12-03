@@ -5,6 +5,7 @@
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
+#include "gams_status.h"
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 
@@ -57,11 +58,11 @@ int8_t init_server() {
     if (!is_init) {
         //init board
         init_game();
+        init_game_status();
         //0 - Init server
         is_init =1;
         puts("INFO_:Initialising server");
         signal(SIGINT, kill_handler);
-        GAME_OVER = 0;
         Server = (server_struct *) malloc(sizeof(server_struct));
         Server->socket_desc = socket(AF_INET, SOCK_STREAM, 0);
         if (Server->socket_desc == -1) {
@@ -108,7 +109,7 @@ int8_t run_server() {
         int client_socket;
         struct sockaddr_in client;
         int c = sizeof(client);
-        while (!GAME_OVER) {
+        while (!is_game_over()) {
             printf("INFO_: ...\n");
             //client_socket= accept(Server->socket_desc, (struct sockaddr*)&client,(socklen_t*)&c);
             client_socket = accept(Server->socket_desc, (struct sockaddr *) &client, (socklen_t *) &c);
@@ -141,8 +142,8 @@ int8_t run_server() {
  *  -destroy board x
  */
 int8_t close_server() {
-    if (GAME_OVER == 0) {
-        GAME_OVER = 1;
+    if (!is_game_over()) {
+        set_game_over();
         for (int i = 0; i < MAX_CLIENT_NUMBER; i++) {
             //kill all child threads
             if (Server->cbase[i].alive == ALIVE) {
