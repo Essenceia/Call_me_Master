@@ -14,7 +14,8 @@ static enum CELL turn;
  */
 static u_int8_t check_can_player_play(enum CLIENT_LIST player);
 static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y);
-static u_int8_t flip(u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
+static u_int8_t check_minim_move_valide(u_int8_t player,int8_t x , int8_t y);
+static u_int8_t flip(u_int8_t do_flip,u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
 /*Definitions
  * Private functions
  */
@@ -24,28 +25,64 @@ static u_int8_t flip(u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
  */
 static u_int8_t check_can_player_play(enum CLIENT_LIST player){
     //todo implement to check if client is not stuck
-    return 1;
+    u_int8_t retval= 0;
+    enum CELL adverary = get_couleur_adverse(player);
+    for(int8_t x = 0 ; x < get_size_x(); x ++){
+        for(int8_t y = 0 ; y < get_size_y(); y ++){
+            if(has_prox_col(adverary,x,y)){
+                //check if move would be valide
+                if(check_minim_move_valide(player,x,y)){
+                    retval =1;//if true break and return retval
+                    goto ckecked;
+                }
+
+            }
+        }
+    }
+    ckecked:
+    return retval;
+}
+static u_int8_t check_minim_move_valide(u_int8_t player,int8_t x , int8_t y){
+    u_int8_t valide =0;
+    for (int8_t dx = -1; dx < 2; dx++) {
+        for (int8_t dy = -1; dy < 2; dy++) {
+            if (!(dx == 0 && dy == 0)) {
+        if(flip(0,player,x,y,dx,dy)){
+            valide=1;
+            goto checked;
+        }
+    }}}
+    checked:
+    return valide;
 }
 /*
  * Returns 1 - yes move is valide
  *         0 - nope you fail
  */
 static u_int8_t check_move_valide(u_int8_t player,int8_t x , int8_t y){
+#ifdef DEBUG
+    printf("INFO_:Player move , x %x , y %x starting to verify validity \n",x,y);
+#endif
     u_int8_t nmbrflips = 0;
-    if(x<=get_size_x()&&y<=get_size_y()&&x>=0&& y>=0&&(show_at_value((u_int8_t) x,(u_int8_t)y))!=EMPTY){
-        nmbrflips +=flip(player,x,y,-1,-1);
-        nmbrflips +=flip(player,x,y,-1,0);
-        nmbrflips +=flip(player,x,y,-1,+1);
-        nmbrflips +=flip(player,x,y,0,-1);
-        nmbrflips +=flip(player,x,y,0,+1);
-        nmbrflips +=flip(player,x,y,+1,-1);
-        nmbrflips +=flip(player,x,y,+1,0);
-        nmbrflips +=flip(player,x,y,+1,+1);
+    if(has_prox_col(get_couleur_adverse(player),x,y)) {
+        if (x <= get_size_x() && y <= get_size_y() && x >= 0 && y >= 0 &&
+            (show_at_value((u_int8_t) x, (u_int8_t) y)) != EMPTY) {
+            nmbrflips += flip(1, player, x, y, -1, -1);
+            nmbrflips += flip(1, player, x, y, -1, 0);
+            nmbrflips += flip(1, player, x, y, -1, +1);
+            nmbrflips += flip(1, player, x, y, 0, -1);
+            nmbrflips += flip(1, player, x, y, 0, +1);
+            nmbrflips += flip(1, player, x, y, +1, -1);
+            nmbrflips += flip(1, player, x, y, +1, 0);
+            nmbrflips += flip(1, player, x, y, +1, +1);
+        }
     }
+#ifdef DEBUG
     printf("INFO_:Player move , x %x , y %x validity %x\n",x,y,nmbrflips);
+#endif
     return nmbrflips;
 }
-static u_int8_t flip(u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
+static u_int8_t flip(u_int8_t do_flip,u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
     u_int8_t possibilite =0;
     int8_t i = ix + dx;
     int8_t j = iy+dy;
@@ -60,7 +97,7 @@ static u_int8_t flip(u_int8_t joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
 #ifdef DEBUG
             printf("INFO_:Found something to flip x:%x y:%x to col %x\n",i,j,coljoueur);
 #endif
-        set_board((u_int8_t )i,(u_int8_t )j,coljoueur);}
+        if(do_flip)set_board((u_int8_t )i,(u_int8_t )j,coljoueur);}
         else if (coljoueur == etudier) // The bit belongs to the player
             return possibilite; // All possible flips become real flips
         else // The bit belongs to no player
@@ -108,6 +145,9 @@ void end_game(){
  */
 u_int8_t new_move_for_player(int socket,enum CLIENT_LIST player){
     u_int8_t can_play=check_can_player_play(player) ;
+#ifdef DEBUG
+printf("INFO_:Player %x can play %x\n",player,can_play);
+#endif
     comm_message* newmsg = (comm_message*)malloc(sizeof(comm_message));
     newmsg->msg=board_prepare_msg();
     //todo verifiy might be not +4
