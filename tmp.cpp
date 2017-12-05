@@ -48,7 +48,7 @@ if (Contro->rev_msg != NULL) {
 //todo - check for recived messages
 if (Contro->rev_msg->type == SKIP_TURN || Contro->rev_msg->type == OK_NOK) {
 //forward send message to player
-player = (enum CLIENT_LIST) Contro->rev_msg->msg[0];
+player = (CLIENT_LISR) Contro->rev_msg->msg[0];
 message_share[player].tosend = recapsulate_for_player(Contro->rev_msg);
 message_share[player].active = 1;
 printf("INFO_Client: Forwarding message to player handler with id %x msg : %s \n",

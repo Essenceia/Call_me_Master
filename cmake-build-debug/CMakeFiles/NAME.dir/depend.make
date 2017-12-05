@@ -10,12 +10,12 @@ CMakeFiles/NAME.dir/client_registration.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../connection_base_struct.c
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../connection_base_struct.h
+CMakeFiles/NAME.dir/connection_base_struct.c.o: ../gams_status.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../lib_connection.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../time_keeper.h
 
-CMakeFiles/NAME.dir/gams_status.c.o: ../board_handler.h
 CMakeFiles/NAME.dir/gams_status.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/gams_status.c.o: ../gams_status.c
 CMakeFiles/NAME.dir/gams_status.c.o: ../gams_status.h
@@ -37,6 +37,7 @@ CMakeFiles/NAME.dir/lib_server.c.o: ../gams_status.h
 CMakeFiles/NAME.dir/lib_server.c.o: ../lib_connection.h
 CMakeFiles/NAME.dir/lib_server.c.o: ../lib_server.c
 CMakeFiles/NAME.dir/lib_server.c.o: ../lib_server.h
+CMakeFiles/NAME.dir/lib_server.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/lib_server.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/lib_server.c.o: ../reservsi_mecanics.h
 CMakeFiles/NAME.dir/lib_server.c.o: ../time_keeper.h
@@ -46,6 +47,7 @@ CMakeFiles/NAME.dir/main.c.o: ../connection_base_struct.h
 CMakeFiles/NAME.dir/main.c.o: ../lib_connection.h
 CMakeFiles/NAME.dir/main.c.o: ../lib_server.h
 CMakeFiles/NAME.dir/main.c.o: ../main.c
+CMakeFiles/NAME.dir/main.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/main.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/main.c.o: ../time_keeper.h
 

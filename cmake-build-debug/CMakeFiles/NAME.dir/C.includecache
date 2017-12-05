@@ -47,6 +47,10 @@ message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 unistd.h
 -
+gams_status.h
+/home/pookie/Documents/code/C/CProj/gams_status.h
+message_parser.h
+/home/pookie/Documents/code/C/CProj/message_parser.h
 
 /home/pookie/Documents/code/C/CProj/connection_base_struct.h
 time_keeper.h
@@ -57,12 +61,12 @@ client_registration.h
 /home/pookie/Documents/code/C/CProj/client_registration.h
 
 /home/pookie/Documents/code/C/CProj/gams_status.c
+stdio.h
+-
 memory.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
-board_handler.h
-/home/pookie/Documents/code/C/CProj/board_handler.h
 
 /home/pookie/Documents/code/C/CProj/gams_status.h
 stdlib.h
@@ -81,16 +85,12 @@ message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 arpa/inet.h
 -
-string.h
--
 stdio.h
 -
 unistd.h
 -
 reservsi_mecanics.h
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
-client_registration.h
-/home/pookie/Documents/code/C/CProj/client_registration.h
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
 
@@ -149,6 +149,8 @@ message_helper.h
 /home/pookie/Documents/code/C/CProj/message_helper.h
 message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
+message_parser.h
+/home/pookie/Documents/code/C/CProj/message_parser.h
 stdio.h
 -
 unistd.h
@@ -165,20 +167,18 @@ message_parser.h
 /home/pookie/Documents/code/C/CProj/message_parser.c
 message_parser.h
 /home/pookie/Documents/code/C/CProj/message_parser.h
-stdio.h
--
-memory.h
--
 message_helper.h
 /home/pookie/Documents/code/C/CProj/message_helper.h
-message_defines.h
-/home/pookie/Documents/code/C/CProj/message_defines.h
+stdio.h
+-
 unistd.h
 -
 
 /home/pookie/Documents/code/C/CProj/message_parser.h
 stdlib.h
 -
+message_defines.h
+/home/pookie/Documents/code/C/CProj/message_defines.h
 
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.c
 stdio.h
@@ -207,9 +207,9 @@ client_registration.h
 /home/pookie/Documents/code/C/CProj/time_keeper.c
 time_keeper.h
 /home/pookie/Documents/code/C/CProj/time_keeper.h
-stdio.h
+memory.h
 -
-string.h
+stdio.h
 -
 unistd.h
 -

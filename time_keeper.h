@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #define CONTROLER_TIME_WAIT ((time_t) 30)
-typedef enum TIMER_STATUS{ TIMER_OFF = 0, TIMER_COUNTING = 1, TIMER_OVERFLOW =2};
+typedef enum{ TIMER_OFF = 0, TIMER_COUNTING = 1, TIMER_OVERFLOW =2}TIMER_STATUS;
 typedef struct{
     u_int8_t active; // boolean is timer active ?
     time_t time_to_warn;//time untill raise warning
@@ -21,7 +21,7 @@ typedef struct{
 //struct TimeKeeper* init_TimeKeeper(u_int8_t winc,u_int8_t dinc,void (*warnfunc)(void));
 TimeKeeper* init_TimeKeeper(time_t wait_time);
 //warn_func warn_timeout;
-enum TIMER_STATUS timer_check_elapsed_time(TimeKeeper *t);
+TIMER_STATUS timer_check_elapsed_time(TimeKeeper *t);
 void timer_start(TimeKeeper *t);
 void timer_stop(TimeKeeper *t);
 u_int8_t timer_get_remaing(TimeKeeper *t);

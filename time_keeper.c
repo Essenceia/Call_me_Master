@@ -2,8 +2,8 @@
 // Created by pookie on 16/11/17.
 //
 #include "time_keeper.h"
+#include <memory.h>
 #include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 #define DEBUG
 TimeKeeper* init_TimeKeeper(time_t wait_time){
@@ -13,11 +13,11 @@ TimeKeeper* init_TimeKeeper(time_t wait_time){
     memcpy(nvt,&tmpstruct,sizeof(TimeKeeper));
     return nvt;
 }
-enum TIMER_STATUS timer_check_elapsed_time(TimeKeeper *t){
+TIMER_STATUS  timer_check_elapsed_time(TimeKeeper *t){
     if(t->active){
         time_t current = time(NULL);
 #ifdef DEBUG
-        printf("INFO_%d:Cheching time current %d , waring time %d \n",getpid(),current,t->time_to_warn);
+        printf("INFO_%d:Cheching time current %lu , waring time %lu \n",getpid(),(unsigned long)current,(unsigned long)t->time_to_warn);
 #endif
         if(current>= t->time_to_warn)return TIMER_OVERFLOW;
         else return TIMER_COUNTING;
@@ -32,6 +32,7 @@ void timer_start(TimeKeeper *t){
 void timer_stop(TimeKeeper *t){
     t->active=0;
 }
+//todo tel of the remaining time in timer
 u_int8_t timer_get_remaing(TimeKeeper *t){
     u_int8_t remaing = CONTROLER_TIME_WAIT;
     if(t->active){

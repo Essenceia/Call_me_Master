@@ -12,12 +12,10 @@
 #define OFFSET_SYNC ((size_t)0)
 #define OFFSET_LNGT ((size_t)1)
 #define OFFSET_TYPE ((size_t)2)
-#define OFFSET_CRS(mssl) ((size_t)(mssl-1))
-
-#define UNDEFINED_TYPE 0x09
+#define OFFSET_CRS(mssl) ((size_t)(mssl)-1)
 #define MIN_RECV_LNG 6
 #define CONTROLBLOCKSIZE 4
-typedef enum MESSAGE_TYPE {
+typedef enum {
     CONNECT =(u_int8_t) 0x01,
     OK_NOK = 0x02,
     NEW_MOVE = 0x03,
@@ -30,8 +28,8 @@ typedef enum MESSAGE_TYPE {
     PLAYER_OK =(u_int8_t) 0x10,
     PING = 0x11,
 
-};
-typedef enum MSG_ERROR {
+}MESSAGE_TYPE ;
+typedef enum {
     NO_ERROR = 0, MISSING_SYNC = -1, UNKNOWN_TYPE = -2, WRONG_LENGTH = -3, CRC_ERROR = -4
-};
+}MSG_ERROR;
 #endif //CPROJ_MESSAGE_DEFINES_H_H

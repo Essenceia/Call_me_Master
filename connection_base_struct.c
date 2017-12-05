@@ -9,6 +9,9 @@
 #include <memory.h>
 #include "message_defines.h"
 #include <unistd.h>
+#include "gams_status.h"
+#include "message_parser.h"
+
 u_int8_t run_connection(connection_base victim);
 /*
  * Create new connection base structure - initialise a connection and find
@@ -17,10 +20,9 @@ u_int8_t run_connection(connection_base victim);
  */
 void init_by_type(connection_base *toinit){
     //store name in name char
-    toinit->client_name =(char *)malloc(sizeof(char)*toinit->rev_msg->mesg_lng);
-    memcpy(toinit->client_name,toinit->rev_msg->msg,toinit->rev_msg->mesg_lng);
-    printf("INFO_%d:New client created with name %s",getpid(),toinit->client_name);
+   printf("INFO_%d:New client created with NAME %s",getpid(),(char *)toinit->rev_msg->msg+1);
     if((toinit->client_type == WP )||(toinit->client_type==BP)){
+        set_player_name(toinit->client_type,(u_int8_t )toinit->rev_msg->mesg_lng-1,(toinit->rev_msg->msg+1));
         toinit->handler = &player_handler;
 
     }else{
@@ -43,7 +45,6 @@ connection_base* init_connection(int dest_sochket){
     //default init
     printf("INFO_%d_:Connection init start",getpid());
     cbase->alive = DEAD;
-    cbase->win = WINNER;
     cbase->rev_msg = NULL;
     cbase->handler = NULL;
     cbase->dest_socket = dest_sochket;
@@ -58,13 +59,11 @@ connection_base* init_connection(int dest_sochket){
             if(cbase->rev_msg->type == CONNECT){
                 //register the client
                 printf("INFO_%d_:Incoming connection request , going to register the client\n",getpid());
-                cbase->client_type = register_new_client(cbase->rev_msg->msg);
+                cbase->client_type = register_new_client(cbase->rev_msg->msg,cbase->rev_msg->mesg_lng-1);
                 if(cbase->client_type!=ERROR){
                     printf("INFO_%d_:we have a valide new client, type %x\n",getpid(),cbase->client_type);
                     //we have a valide new client
                     cbase->alive = ALIVE;
-                    cbase->client_name=(char*)malloc(sizeof(char)*cbase->rev_msg->mesg_lng-1);
-                    memcpy(cbase->client_name,cbase->rev_msg->msg+1,cbase->rev_msg->mesg_lng-1);
                     //initialise the client to it's final status
                     init_by_type(cbase);
                     returnstruct = cbase;
@@ -101,7 +100,7 @@ void destroy_connection_base(connection_base *tokill){
     if(unregister_client(tokill->client_type)!=VALIDE_ACCES)puts("ERRO_:Error in client unregistering");
     free(tokill->clock);
     destroy_msg(tokill->rev_msg);
-    free(tokill->client_name);
+    destroy_msg(tokill->tosend_msg);
     close(tokill->dest_socket);
     //final blow
     free(tokill);

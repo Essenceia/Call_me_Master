@@ -11,15 +11,15 @@
 #include "message_parser.h"
 
 //#define DEBUG
-static enum CELL turn;
-#define STARTING_PLAYER ((enum CELL)WHITE)
+static CELL turn;
+#define STARTING_PLAYER ((CELL)WHITE)
 /*Decalrations
  * Private functions
  */
-static u_int8_t check_can_player_play(enum CLIENT_LIST player);
-static u_int8_t check_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y);
-static u_int8_t check_minim_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y);
-static u_int8_t flip(u_int8_t do_flip,enum CLIENT_LIST player,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
+static u_int8_t check_can_player_play(CLIENT_LIST player);
+static u_int8_t check_move_valide(CLIENT_LIST player,int8_t x , int8_t y);
+static u_int8_t check_minim_move_valide(CLIENT_LIST player,int8_t x , int8_t y);
+static u_int8_t flip(u_int8_t do_flip,CLIENT_LIST player,int8_t ix,int8_t iy,int8_t dx,int8_t dy);
 /*Definitions
  * Private functions
  */
@@ -27,10 +27,10 @@ static u_int8_t flip(u_int8_t do_flip,enum CLIENT_LIST player,int8_t ix,int8_t i
  * Return 1 - yes
  *        0 - no skip turn
  */
-static u_int8_t check_can_player_play(enum CLIENT_LIST player){
+static u_int8_t check_can_player_play(CLIENT_LIST player){
     //todo implement to check if client is not stuck
     u_int8_t retval= 0;
-    enum CELL adverary = get_couleur_adverse(player);
+    CELL adverary = get_couleur_adverse(player);
     for(int8_t x = 0 ; x < get_size_x(); x ++){
         for(int8_t y = 0 ; y < get_size_y(); y ++){
             if(has_prox_col(adverary,x,y)){
@@ -46,7 +46,7 @@ static u_int8_t check_can_player_play(enum CLIENT_LIST player){
     ckecked:
     return retval;
 }
-static u_int8_t check_minim_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y){
+static u_int8_t check_minim_move_valide(CLIENT_LIST player,int8_t x , int8_t y){
     u_int8_t valide =0;
     for (int8_t dx = -1; dx < 2; dx++) {
         for (int8_t dy = -1; dy < 2; dy++) {
@@ -63,7 +63,7 @@ static u_int8_t check_minim_move_valide(enum CLIENT_LIST player,int8_t x , int8_
  * Returns 1 - yes move is valide
  *         0 - nope you fail
  */
-static u_int8_t check_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y){
+static u_int8_t check_move_valide(CLIENT_LIST player,int8_t x , int8_t y){
 
     u_int8_t nmbrflips = 0;
     if(has_prox_col(get_couleur_adverse(player),x,y)) {
@@ -88,14 +88,14 @@ static u_int8_t check_move_valide(enum CLIENT_LIST player,int8_t x , int8_t y){
     add_point(player,nmbrflips);
     return nmbrflips;
 }
-static u_int8_t flip(u_int8_t do_flip,enum CLIENT_LIST joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
+static u_int8_t flip(u_int8_t do_flip,CLIENT_LIST joueur,int8_t ix,int8_t iy,int8_t dx,int8_t dy){
     u_int8_t possibilite =0;
     int8_t i = ix + dx;
     int8_t j = iy+dy;
 
-    enum CELL adversaire = get_couleur_adverse(joueur);
-    enum CELL coljoueur = get_couleur_joueur(joueur);
-    enum CELL etudier;
+    CELL adversaire = get_couleur_adverse(joueur);
+    CELL coljoueur = get_couleur_joueur(joueur);
+    CELL etudier;
 #ifdef DEBUG
     printf("INFO_:Check if we can flip x:%x y:%x to col %x",i,j,coljoueur);
 #endif
@@ -134,7 +134,7 @@ void init_game(){
  * - ok   0x01
  * - nok  0x00
  */
-u_int8_t check_player_move(int socket,enum CLIENT_LIST player,comm_message * recvmsg){
+u_int8_t check_player_move(int socket,CLIENT_LIST player,comm_message * recvmsg){
     u_int8_t oknok = 0x00;//not okay by default
     int8_t x,y;
     x=recvmsg->msg[0];
@@ -156,7 +156,7 @@ void end_game(){
  * Creats a new move for a player, additionnaly tells it
  * if he must skip his turn
  */
-u_int8_t new_move_for_player(int socket,enum CLIENT_LIST player){
+u_int8_t new_move_for_player(int socket,CLIENT_LIST player){
     u_int8_t can_play=check_can_player_play(player) ;
 #ifdef DEBUG
 printf("INFO_:Player %x can play %x\n",player,can_play);
@@ -185,7 +185,7 @@ printf("INFO_:Player %x can play %x\n",player,can_play);
  */
 u_int8_t send_status(int socket) {
     u_int8_t length=0;
-    enum CLIENT_LIST player = BP;
+    CLIENT_LIST player = BP;
     comm_message *nvmsg = (comm_message *) malloc(sizeof(comm_message));
     nvmsg->type = STATUS_1;
     nvmsg->msg = board_prepare_msg();

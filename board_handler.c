@@ -22,7 +22,7 @@ void showbits(unsigned int x) {
     printf("\n");
 }
 
-enum CELL show_at_value(u_int8_t x, u_int8_t y) {
+CELL show_at_value(u_int8_t x, u_int8_t y) {
     u_int8_t absindex, relindex, offset, buffer, val;
     absindex = gbIx(x, y);
     relindex = absindex / 4;
@@ -34,7 +34,7 @@ enum CELL show_at_value(u_int8_t x, u_int8_t y) {
     //showbits((0x03&buffer));
     printf("INFO_%d:CELL at coord x:%x y:%x has value %x\n", getpid(), x, y, (0x03 & buffer));
 #endif
-    return (enum CELL) (0x03 & buffer);
+    return (CELL) (0x03 & buffer);
 }
 
 //Get index of block according to x and y
@@ -83,9 +83,9 @@ void init_board() {
            Board->str_lng);
 #endif
     Board->board_str = (u_int8_t *) malloc(sizeof(u_int8_t) * Board->str_lng);
-    //Board->board = (enum CELL*)malloc(sizeof(enum CELL)*sizeofboard);
+    //Board->board = (CELL*)malloc(sizeof(CELL)*sizeofboard);
     //set to empty
-    //memset( Board->board, 0 ,sizeof(enum CELL)*sizeofboard );
+    //memset( Board->board, 0 ,sizeof(CELL)*sizeofboard );
     memset(Board->board_str, 0, sizeof(u_int8_t) * Board->str_lng);
     init_move_board();
 
@@ -117,7 +117,7 @@ void destroy_board() {
     free(Board);
 }
 
-void set_board(u_int8_t x, u_int8_t y, enum CELL val) {
+void set_board(u_int8_t x, u_int8_t y, CELL val) {
     u_int16_t absindex;
     u_int8_t mask, buffer, newval;
     u_int8_t offset;
@@ -194,8 +194,8 @@ u_int8_t get_size_y() {
     return Board->board_size_y;
 }
 
-enum CELL get_couleur_adverse(u_int8_t player) {
-    enum CELL retval = NOT_USED;
+CELL get_couleur_adverse(u_int8_t player) {
+    CELL retval = NOT_USED;
     switch (player) {
         case 0x01:
 
@@ -214,8 +214,8 @@ enum CELL get_couleur_adverse(u_int8_t player) {
     return retval;
 }
 
-enum CELL get_couleur_joueur(u_int8_t player) {
-    enum CELL retval = NOT_USED;
+CELL get_couleur_joueur(u_int8_t player) {
+    CELL retval = NOT_USED;
     switch (player) {
         case 0x02:
             retval = WHITE;
@@ -234,10 +234,10 @@ enum CELL get_couleur_joueur(u_int8_t player) {
 }
 void init_move_board(){
     CBoard = (move_board*)malloc(sizeof(move_board));
-    CBoard->cboard = (enum CELL_PROX**)malloc(sizeof(enum CELL_PROX*)*Board->board_size_x);
+    CBoard->cboard = (CELL_PROX**)malloc(sizeof(CELL_PROX*)*Board->board_size_x);
     for(u_int8_t i = 0 ; i < Board->board_size_x; i ++) {
-        CBoard->cboard[i] = (enum CELL_PROX *) malloc(sizeof(enum CELL_PROX) * Board->board_size_y);
-        //memset(CBoard->cboard[i], 0, sizeof(enum CELL_PROX) * Board->board_size_y);
+        CBoard->cboard[i] = (CELL_PROX *) malloc(sizeof(CELL_PROX) * Board->board_size_y);
+        //memset(CBoard->cboard[i], 0, sizeof(CELL_PROX) * Board->board_size_y);
     }
 #ifdef DEBUG
     printf("INFO_:Filling board\n");
@@ -257,13 +257,13 @@ void init_move_board(){
     }
 #endif
 }
-u_int8_t has_prox_col(enum CELL prox_col,u_int8_t x,u_int8_t y){//check if we have a certain color in proximity
-    enum CELL_PROX clst = CBoard->cboard[x][y];
+u_int8_t has_prox_col(CELL prox_col,u_int8_t x,u_int8_t y){//check if we have a certain color in proximity
+    CELL_PROX clst = CBoard->cboard[x][y];
     return ((prox_col==WHITE&&(clst==PROX_WHITE||clst==PROX_BOTH))
             ||(prox_col==BLACK&&(clst==PROX_BLACK||clst==PROX_BOTH)))
            ?1:0;
 }
-u_int8_t count_prox_col(enum CELL nv_col, int8_t sx,int8_t sy){
+u_int8_t count_prox_col(CELL nv_col, int8_t sx,int8_t sy){
 
     u_int8_t retval=0;
 #ifdef DEBUG_SUPER
@@ -282,7 +282,7 @@ u_int8_t count_prox_col(enum CELL nv_col, int8_t sx,int8_t sy){
     }
     return retval;
 }
-u_int8_t count_round_prox_col(enum CELL nv_col, int8_t sx,int8_t sy) {
+u_int8_t count_round_prox_col(CELL nv_col, int8_t sx,int8_t sy) {
     u_int8_t retval = 0;
     for (int8_t dx = -1; dx < 2; dx++) {
         for (int8_t dy = -1; dy < 2; dy++) {
@@ -300,7 +300,7 @@ u_int8_t count_round_prox_col(enum CELL nv_col, int8_t sx,int8_t sy) {
     return retval;
 }
 
-void update_prox_col(enum CELL prox_col,u_int8_t x,u_int8_t y)//update status of proximity bits when we set a new cell value
+void update_prox_col(CELL prox_col,u_int8_t x,u_int8_t y)//update status of proximity bits when we set a new cell value
 {
 #ifdef DEBUG
     printf("INFO_:Stating neighbours update of cell in x:%x y:%x\n",x,y );

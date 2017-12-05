@@ -158,6 +158,7 @@ int8_t close_server() {
         kill(0, SIGINT);
         //end game , destroy board
         end_game();
+        destroy_game_status();
         free(Server);
         return 0;
     }

@@ -9,16 +9,16 @@
 #include <sys/socket.h>
 #define DEBUG
 
-char check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){
+u_int8_t check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){
     //verify that the total message length and app message
     //length are of appropriate size
-    char res;
-    res = ((tmsglng == (msgl + CONTROLBLOCKSIZE))? '1' : '0' );
+    u_int8_t res;
+    res = ((tmsglng == (msgl + CONTROLBLOCKSIZE))? 1 : 0 );
     printf("INFO_:Message length %o expected length %o, result is %u\n",tmsglng,(msgl + CONTROLBLOCKSIZE),res);
 
     return res;
 }
-char check_type_valide(char type){
+u_int8_t check_type_valide(u_int8_t type){
     if((type >=CONNECT)&&(type <=PING)){
         return 1;
     }else{
@@ -39,11 +39,11 @@ u_int8_t get_crc(u_int8_t *appmsg,size_t alng){
     return ((u_int8_t)(accumulater&0xFF));
 }
 u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng){
-    enum MSG_ERROR error = NO_ERROR;
+    MSG_ERROR  error = NO_ERROR;
     if(recvlng >= MIN_RECV_LNG) {
         if (recvmsg[OFFSET_SYNC] == BLOCK_SYNC) {
             if (check_type_valide(recvmsg[OFFSET_TYPE])) {
-                if(check_valide_legth(recvlng,recvmsg[ OFFSET_LNGT ] )=='1' ){
+                if(check_valide_legth(recvlng,recvmsg[ OFFSET_LNGT ] )==1 ){
                     puts("INFO_:No error in lenght\n");
                     if(get_crc(recvmsg,recvlng-1)==recvmsg[OFFSET_CRS(recvlng)]){
                         error = NO_ERROR;
@@ -176,7 +176,7 @@ comm_message* recapsulate_for_player(comm_message *to_recapsulate){
     to_recapsulate->msg=new_message;
     return to_recapsulate;
 }
-
+/*
 comm_message* recapsulate_for_controller(comm_message *sendtoclient, u_int8_t client_id){
     u_int8_t *newmsg = (u_int8_t*)malloc(sizeof(u_int8_t)*(sendtoclient->mesg_lng+1));
     newmsg[0]=client_id;
@@ -187,7 +187,7 @@ comm_message* recapsulate_for_controller(comm_message *sendtoclient, u_int8_t cl
     free(sendtoclient->msg);
     sendtoclient->msg=newmsg;
     return sendtoclient;
-}
+}*/
 void msg_ping(int socket){
     comm_message *nvm=(comm_message*)malloc(sizeof(comm_message));
     nvm->type=PING;

@@ -11,12 +11,12 @@ CMakeFiles/NAME.dir/connection_base_struct.c.o
  /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/connection_base_struct.c
  /home/pookie/Documents/code/C/CProj/connection_base_struct.h
+ /home/pookie/Documents/code/C/CProj/gams_status.h
  /home/pookie/Documents/code/C/CProj/lib_connection.h
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/gams_status.c.o
- /home/pookie/Documents/code/C/CProj/board_handler.h
  /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/gams_status.c
  /home/pookie/Documents/code/C/CProj/gams_status.h
@@ -38,6 +38,7 @@ CMakeFiles/NAME.dir/lib_server.c.o
  /home/pookie/Documents/code/C/CProj/lib_connection.h
  /home/pookie/Documents/code/C/CProj/lib_server.c
  /home/pookie/Documents/code/C/CProj/lib_server.h
+ /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
@@ -47,6 +48,7 @@ CMakeFiles/NAME.dir/main.c.o
  /home/pookie/Documents/code/C/CProj/lib_connection.h
  /home/pookie/Documents/code/C/CProj/lib_server.h
  /home/pookie/Documents/code/C/CProj/main.c
+ /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
 CMakeFiles/NAME.dir/message_helper.c.o
