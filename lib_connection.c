@@ -13,6 +13,8 @@
 #include "reservsi_mecanics.h"
 #include "client_registration.h"
 #include "gams_status.h"
+#include "message_parser.h"
+
 //#define WAIT_FOR_ALL
 typedef struct TUBE {
     //u_int8_t *tobesent;
@@ -71,7 +73,17 @@ void player_handler(void *player) {
 #endif
         {
         //check if our turn
-            sleep(1);
+            Player->rev_msg = recive_msg(Player->dest_socket);
+            if(Player->rev_msg!=NULL) {
+                switch (Player->rev_msg->type) {
+                    case PING:
+                        msg_ping(Player->dest_socket);
+                        break;
+                    default:printf("ERRO_%d:Recived unexpected message from controller, type %d",
+                                   getpid(),Player->rev_msg->type);
+                        break;
+                }
+                destroy_msg(Player->rev_msg);
         printf("INFO_%d:In while loop , player type %x , game_step %x \n", getpid(),Player->client_type,game_step%2);
         if (Play_order[(game_step % 2)] == Player->client_type) {
             //send New move
@@ -111,6 +123,7 @@ void player_handler(void *player) {
                             }
                         }
                     }
+                    destroy_msg(Player->rev_msg);
                 }if(timer_check_elapsed_time(Player->clock)==TIMER_OVERFLOW){
                     Player->win=LOSER;
                     Player->alive=DEAD;
@@ -137,12 +150,27 @@ void gclient_handler(void *controler) {
     //set game counter to zero
     game_step = 0;
     u_int16_t previous_step = game_step;
-   while ((!is_game_over()) && has_all_clients()){
+    struct timeval tv = {1, 0};
+    setsockopt(Contro->dest_socket, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
+
+    while ((!is_game_over()) && has_all_clients()){
         sleep(2);
        if(previous_step!=game_step){
            //send statup1 to controller
            send_status(Contro->dest_socket);
        }
+        Contro->rev_msg = recive_msg(Contro->dest_socket);
+        if(Contro->rev_msg!=NULL) {
+            switch (Contro->rev_msg->type) {
+                case PING:
+                    msg_ping(Contro->dest_socket);
+                    break;
+                default:printf("ERRO_%d:Recived unexpected message from controller, type %d",
+                    getpid(),Contro->rev_msg->type);
+                    break;
+            }
+            destroy_msg(Contro->rev_msg);
+        }
     }
     destroy_connection_base(Contro);
 
@@ -156,8 +184,9 @@ comm_message *recive_msg(int socket) {
     if (size_msg > 0) {
         recvcom = parse_recv_msg(recv_msg, size_msg);
 #ifdef DEBUG
-        if (recv != NULL) {
+        if (recvcom != NULL) {
             printf("INFO_%d:Message was recived form client\n", getpid());
+
         } else {
             printf("WARN_%d:Error in recived message\n", getpid());
         }

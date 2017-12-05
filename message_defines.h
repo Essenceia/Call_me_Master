@@ -28,6 +28,7 @@ typedef enum MESSAGE_TYPE {
     CONTROL = 0x08,
     SKIP_TURN = 0x09,//todo - change
     PLAYER_OK =(u_int8_t) 0x10,
+    PING = 0x11,
 
 };
 typedef enum MSG_ERROR {

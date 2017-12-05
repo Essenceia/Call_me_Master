@@ -3,6 +3,7 @@
 //
 #include "message_helper.h"
 #include "message_defines.h"
+#include "message_parser.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -18,7 +19,7 @@ char check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){
     return res;
 }
 char check_type_valide(char type){
-    if((type >=CONNECT)&&(type <=PLAYER_OK)){
+    if((type >=CONNECT)&&(type <=PING)){
         return 1;
     }else{
         printf("ERRO_:Type of message is invalide errro, got type %x \n",type);
@@ -186,4 +187,10 @@ comm_message* recapsulate_for_controller(comm_message *sendtoclient, u_int8_t cl
     free(sendtoclient->msg);
     sendtoclient->msg=newmsg;
     return sendtoclient;
+}
+void msg_ping(int socket){
+    comm_message *nvm=(comm_message*)malloc(sizeof(comm_message));
+    nvm->type=PING;
+    nvm->mesg_lng =0;
+    sendof(socket,nvm);
 }
