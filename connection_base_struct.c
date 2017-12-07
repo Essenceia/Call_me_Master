@@ -61,7 +61,7 @@ connection_base* init_connection(int dest_sochket){
                 printf("INFO_%d_:Incoming connection request , going to register the client\n",pthread_self());
                 cbase->client_type = register_new_client(cbase->rev_msg->msg,cbase->rev_msg->mesg_lng-1);
                 if(cbase->client_type!=ERROR){
-                    printf("INFO_%d_:we have a valide new client, type %x\n",pthread_self(),cbase->client_type);
+                    printf("INFO_%d_:we have a valide new client, type %x, ALIVE\n",pthread_self(),cbase->client_type);
                     //we have a valide new client
                     cbase->alive = ALIVE;
                     //initialise the client to it's final status

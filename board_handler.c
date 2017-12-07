@@ -13,16 +13,18 @@
 #ifdef DEBUG
 //#define DEBUG_SUPER
 #endif
-#define DEBUG_SPECIAL
+//#define DEBUG_SPECIAL
 static board *Board;
 static move_board *CBoard;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 void showbits(unsigned int x) {
+#ifdef DEBUG_SPECIAL
     int i;
     for (i = (sizeof(u_int8_t) * 8) - 1; i >= 0; i--)
         (x & (1u << i)) ? putchar('1') : putchar('0');
 
     printf("\n");
+#endif
 }
 
 CELL show_at_value(u_int8_t x, u_int8_t y) {
@@ -156,7 +158,7 @@ void set_board(u_int8_t x, u_int8_t y, CELL val) {
 
 
         Board->board_str[relindex] = newval;
-        //update_prox_col(val,x,y);//nope has to be done at the end of a valide move
+        update_prox_col(val,x,y);//experiment // nope has to be done at the end of a valide move
 #ifdef DEBUG
         printf("INFO_:Have just updated board\n");
         print_board();
@@ -172,8 +174,8 @@ u_int8_t *format_board() {
 }
 
 u_int8_t get_board_string_lng() {
-#ifdef DEBUG
-    printf("INFO_:Board length is %d ",Board->str_lng
+#ifdef DEBUG_SPECIAL
+    printf("INFO_:Board length is %x ",Board->str_lng
     );
 #endif
     return Board->str_lng;
@@ -336,38 +338,42 @@ u_int8_t count_round_prox_col(CELL nv_col, int8_t sx,int8_t sy) {
 void update_prox_col(CELL prox_col,u_int8_t x,u_int8_t y)//update status of proximity bits when we set a new cell value
 {
     //no need to lock already protected by calling function
-#ifdef DEBUG
+#ifdef DEBUG_SPECIAL
     printf("INFO_:Stating neighbours update of cell in x:%x y:%x\n",x,y );
 #endif
-    //we have changed color of cell in x,y
-    int8_t ix,iy;
-    u_int8_t pb=0,pw=0;
-    //start by setting the pos cell to used
-    CBoard->cboard[x][y] = PROX_USED;
-    //look at all neihbours that are empty
-    for(int8_t dx= -1; dx<2;dx++){
-        ix=(int8_t )x+dx;
-        for (int8_t dy= -1;dy  < 2; dy++) {
-            iy =(int8_t)y+dy;
-            if(ix>= 0 && ix < Board->board_size_x &&
-               iy >= 0 && iy <Board->board_size_y){
-                if(CBoard->cboard[ix][iy]!=PROX_USED){
+    /*for(u_int8_t ax = 0 ; ax < get_size_x(); ax++) {
+        for (u_int8_t ay = 0; ay < get_size_y(); ay++) {*/
+            //we have changed color of cell in x,y
+            int8_t ix, iy;
+            u_int8_t pb = 0, pw = 0;
+            //start by setting the pos cell to used
+            CBoard->cboard[x][y] = PROX_USED;
+            //look at all neihbours that are empty
+            for (int8_t dx = -1; dx < 2; dx++) {
+                ix = (int8_t) x + dx;
+                for (int8_t dy = -1; dy < 2; dy++) {
+                    iy = (int8_t) y + dy;
+                    if (ix >= 0 && ix < Board->board_size_x &&
+                        iy >= 0 && iy < Board->board_size_y) {
+                        if (CBoard->cboard[ix][iy] != PROX_USED) {
 #ifdef DEBUG_SUPER
-    printf("INFO_:Looking at neighbours of cell in x:%x y:%x\n",ix,iy );
+                            printf("INFO_:Looking at neighbours of cell in x:%x y:%x\n",ix,iy );
 #endif
-                    pw=count_round_prox_col(WHITE,ix,iy);
-                    pb= count_round_prox_col(BLACK,ix,iy);
-                    if(pw||pb){
-                        //we have at least one neinhour
-                        if(pw&&pb)CBoard->cboard[ix][iy]=PROX_BOTH;
-                        else{
-                            if(pw)CBoard->cboard[ix][iy]=PROX_WHITE;
-                            else CBoard->cboard[ix][iy]=PROX_BLACK;
+                            pw = count_round_prox_col(WHITE, ix, iy);
+                            pb = count_round_prox_col(BLACK, ix, iy);
+                            if (pw || pb) {
+                                //we have at least one neinhour
+                                if (pw && pb)CBoard->cboard[ix][iy] = PROX_BOTH;
+                                else {
+                                    if (pw)CBoard->cboard[ix][iy] = PROX_WHITE;
+                                    else CBoard->cboard[ix][iy] = PROX_BLACK;
+                                }
+                            }
                         }
                     }
+
                 }
             }
-
-        }
-    }
+       /* }
+    }*/
 }

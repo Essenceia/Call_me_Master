@@ -11,9 +11,9 @@
 #include "gams_status.h"
 #include "message_parser.h"
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_2
-#define DEBUG_3
+//#define DEBUG_3
 static CLIENT_LIST turn;
 #define STARTING_PLAYER ((CLIENT_LIST)WP)
 /*Decalrations
@@ -187,26 +187,30 @@ void end_game(){
  */
 u_int8_t new_move_for_player(int socket,CLIENT_LIST player){
     u_int8_t can_play=check_can_player_play(player) ;
-    set_stuck_status(player,can_play);
-#ifdef DEBUG
-printf("INFO_:Player %x can play %x\n",player,can_play);
-#endif
+
     comm_message* newmsg = (comm_message*)malloc(sizeof(comm_message));
-
-#ifndef DEBUG
-    printf("INFO_%d:New move message length was set to %d , can play %x\n",pthread_self(),newmsg->mesg_lng,can_play);
-#endif
-
     if(can_play!=0){
         newmsg->type=NEXT_TURN;
         turn=player;
+        set_stuck_status(player,0);
     }else{
         newmsg->type=SKIP_TURN;
         turn= get_couleur_adverse(player);
+        set_stuck_status(player,1);
         //don't update turn not the right turn
     }
-    newmsg->mesg_lng=get_board_string_lng()+4;
+#ifdef DEBUG
+    printf("INFO_:Get board string length %d \n",get_board_string_lng());
+#endif
+    newmsg->mesg_lng=(u_int8_t )get_board_string_lng()+(u_int8_t )4;
     newmsg->msg=board_prepare_msg();
+#ifdef DEBUG
+    printf("INFO_:Print of message %x \n",newmsg->mesg_lng);
+    for(int i = 0 ; i < newmsg->mesg_lng; i++){
+        printf("_0x%x",newmsg->msg[i]);
+    }
+    printf("\n");
+#endif
     sendof(socket,newmsg);
 
     return can_play;

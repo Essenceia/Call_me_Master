@@ -32,6 +32,7 @@ void player_handler(void *player) {
 
     //send ok message
     msg_player_ok(Player->client_type, Player->dest_socket);
+
     destroy_msg(Player->rev_msg);
     //check everbody is connected
 #ifdef WAIT_FOR_ALL // wait for all clients to be connected
@@ -44,7 +45,7 @@ void player_handler(void *player) {
     //game
     while (Player->alive == ALIVE && (!GAME_OVER) && has_all_clients())
 #else
-        while (Player->alive==ALIVE && (!is_game_over()) )
+        while (Player->alive==ALIVE && (is_game_over()==0) )
 #endif
         {
         //check if our turn
@@ -120,6 +121,10 @@ void player_handler(void *player) {
         }
 
     }
+#ifdef DEBUG
+    printf("INFO_%d: Sending end of game message alive? %x end of game %x\n",Player->alive==ALIVE,
+    is_game_over()==0);
+#endif
     send_game_end(Player->dest_socket);
     msg_game_end_status();
     unregister_client(Player->client_type);

@@ -42,11 +42,11 @@ comm_message *parse_recv_msg(u_int8_t *recvmsg, u_int8_t recvlngth) {
 }
 
 void destroy_msg(comm_message *tokill) {
-    //printf("INFO_%d:Destroying commm message\n");
-    if (tokill != NULL) {
+    printf("INFO_%d:Destroying commm message\n");
+   /* if (tokill != NULL) {
         //if (tokill->msg != NULL)free(tokill->msg);
         free(tokill);
         tokill = NULL;
-    }
+    }*/
 }
 

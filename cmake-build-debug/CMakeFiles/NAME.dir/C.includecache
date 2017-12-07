@@ -85,6 +85,8 @@ pthread.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
+stdlib.h
+-
 
 /home/pookie/Documents/code/C/CProj/gams_status.h
 stdlib.h

@@ -4,7 +4,7 @@
 #include "time_keeper.h"
 #include <stdio.h>
 #include <pthread.h>
-#define DEFAULT_WAIT_TIME 30
+#define DEFAULT_WAIT_TIME 300
 #define DEBUG
 #define PINX(p) ((p)==BP)?0:1
 static unsigned char init = 0;
@@ -17,23 +17,33 @@ void init_timer(){
     }
     init ++;
 }
-inline TimeKeeper gtdp(CLIENT_LIST player){
-    if(!init)init_timer();
-    return (player==WP)?timers[1]:timers[0];
-}
 TIMER_STATUS  timer_check_elapsed_time(CLIENT_LIST player){
-    if(timers[PINX(player)].active){
-        time_t current = time(NULL);
+    time_t current = time(NULL);
 #ifdef DEBUG
-        printf("INFO_%d:Cheching time current %lu , waring time %lu \n",pthread_self(),(unsigned long)current,(unsigned long)timers[PINX(player)].time_to_warn);
+    printf("INFO_%d:Cheching time current %lu\n    active %x waring time %lu \n",pthread_self(),(unsigned long)current,timers[PINX(player)].active,(unsigned long)timers[PINX(player)].time_to_warn);
+
 #endif
-        if(current>= timers[PINX(player)].time_to_warn)return TIMER_OVERFLOW;
-        else return TIMER_COUNTING;
+    if(timers[PINX(player)].active){
+
+
+        if(current>= timers[PINX(player)].time_to_warn){
+#ifdef DEBUG
+            printf("INFO_%d: Timer status TIMER_OVERFLOW\n ");
+#endif
+            return TIMER_OVERFLOW;
+        }
+        else{
+#ifdef DEBUG
+            printf("INFO_%d: Timer status TIMER_COUNTING\n ");
+#endif
+            return TIMER_COUNTING;
+        }
     }else{
         return TIMER_OFF;
     }
 }
 void timer_start(CLIENT_LIST player){
+    if(!init)init_timer();
     timers[PINX(player)].active=1;
     timers[PINX(player)].time_to_warn = time(NULL) + timers[PINX(player)].warn_delay_increment;
 }
