@@ -10,6 +10,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/NAME.dir/lib_connection.c.o"
   "CMakeFiles/NAME.dir/client_registration.c.o"
   "CMakeFiles/NAME.dir/reservsi_mecanics.c.o"
+  "CMakeFiles/NAME.dir/game_step.c.o"
   "NAME.pdb"
   "NAME"
 )

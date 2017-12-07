@@ -16,6 +16,9 @@ CMakeFiles/NAME.dir/connection_base_struct.c.o
  /home/pookie/Documents/code/C/CProj/message_defines.h
  /home/pookie/Documents/code/C/CProj/message_parser.h
  /home/pookie/Documents/code/C/CProj/time_keeper.h
+CMakeFiles/NAME.dir/game_step.c.o
+ /home/pookie/Documents/code/C/CProj/game_step.c
+ /home/pookie/Documents/code/C/CProj/game_step.h
 CMakeFiles/NAME.dir/gams_status.c.o
  /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/gams_status.c
@@ -23,6 +26,7 @@ CMakeFiles/NAME.dir/gams_status.c.o
 CMakeFiles/NAME.dir/lib_connection.c.o
  /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/connection_base_struct.h
+ /home/pookie/Documents/code/C/CProj/game_step.h
  /home/pookie/Documents/code/C/CProj/gams_status.h
  /home/pookie/Documents/code/C/CProj/lib_connection.c
  /home/pookie/Documents/code/C/CProj/lib_connection.h
@@ -71,5 +75,6 @@ CMakeFiles/NAME.dir/reservsi_mecanics.c.o
  /home/pookie/Documents/code/C/CProj/reservsi_mecanics.c
  /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
 CMakeFiles/NAME.dir/time_keeper.c.o
+ /home/pookie/Documents/code/C/CProj/client_registration.h
  /home/pookie/Documents/code/C/CProj/time_keeper.c
  /home/pookie/Documents/code/C/CProj/time_keeper.h

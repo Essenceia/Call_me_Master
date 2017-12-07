@@ -204,6 +204,33 @@ connection_base_struct.c.s:
 	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/connection_base_struct.c.s
 .PHONY : connection_base_struct.c.s
 
+game_step.o: game_step.c.o
+
+.PHONY : game_step.o
+
+# target to build an object file
+game_step.c.o:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/game_step.c.o
+.PHONY : game_step.c.o
+
+game_step.i: game_step.c.i
+
+.PHONY : game_step.i
+
+# target to preprocess a source file
+game_step.c.i:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/game_step.c.i
+.PHONY : game_step.c.i
+
+game_step.s: game_step.c.s
+
+.PHONY : game_step.s
+
+# target to generate assembly for a file
+game_step.c.s:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/game_step.c.s
+.PHONY : game_step.c.s
+
 gams_status.o: gams_status.c.o
 
 .PHONY : gams_status.o
@@ -438,6 +465,9 @@ help:
 	@echo "... connection_base_struct.o"
 	@echo "... connection_base_struct.i"
 	@echo "... connection_base_struct.s"
+	@echo "... game_step.o"
+	@echo "... game_step.i"
+	@echo "... game_step.s"
 	@echo "... gams_status.o"
 	@echo "... gams_status.i"
 	@echo "... gams_status.s"

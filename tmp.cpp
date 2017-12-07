@@ -37,8 +37,8 @@ if (message_share[GC].active) {
 Contro->tosend_msg = message_share[GC].tosend;
 //we want to share data to the client
 if (sendof(Contro->dest_socket, Contro->tosend_msg) == 0) {
-printf("INFO_%d:Message sucessfully sent to client \n", getpid());
-} else printf("ERRO_%d:Message failed sent to client \n", getpid());
+printf("INFO_%d:Message sucessfully sent to client \n", pthread_self());
+} else printf("ERRO_%d:Message failed sent to client \n", pthread_self());
 message_share[GC].active = 0;
 
 }
@@ -56,7 +56,7 @@ player, (char *) message_share[player].tosend->msg);
 
 
 } else {
-printf("ERRO_%d: Unexpected message recived form controller message is of type %x", getpid(),
+printf("ERRO_%d: Unexpected message recived form controller message is of type %x", pthread_self(),
         Contro->rev_msg->type);
 }
 destroy_msg(Contro->rev_msg);

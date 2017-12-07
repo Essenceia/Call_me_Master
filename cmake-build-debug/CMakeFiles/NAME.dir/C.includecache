@@ -17,6 +17,8 @@ board_handler.h
 /home/pookie/Documents/code/C/CProj/board_handler.h
 unistd.h
 -
+pthread.h
+-
 
 /home/pookie/Documents/code/C/CProj/board_handler.h
 stdlib.h
@@ -26,6 +28,8 @@ stdlib.h
 client_registration.h
 /home/pookie/Documents/code/C/CProj/client_registration.h
 stdio.h
+-
+pthread.h
 -
 
 /home/pookie/Documents/code/C/CProj/client_registration.h
@@ -47,6 +51,8 @@ message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 unistd.h
 -
+pthread.h
+-
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
 message_parser.h
@@ -60,10 +66,22 @@ message_parser.h
 client_registration.h
 /home/pookie/Documents/code/C/CProj/client_registration.h
 
+/home/pookie/Documents/code/C/CProj/game_step.c
+pthread.h
+-
+game_step.h
+/home/pookie/Documents/code/C/CProj/game_step.h
+
+/home/pookie/Documents/code/C/CProj/game_step.h
+stdlib.h
+-
+
 /home/pookie/Documents/code/C/CProj/gams_status.c
 stdio.h
 -
 memory.h
+-
+pthread.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
@@ -89,10 +107,16 @@ stdio.h
 -
 unistd.h
 -
+pthread.h
+-
 reservsi_mecanics.h
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
+game_step.h
+/home/pookie/Documents/code/C/CProj/game_step.h
+message_parser.h
+/home/pookie/Documents/code/C/CProj/message_parser.h
 
 /home/pookie/Documents/code/C/CProj/lib_connection.h
 message_parser.h
@@ -112,6 +136,8 @@ string.h
 signal.h
 -
 unistd.h
+-
+pthread.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
@@ -141,8 +167,6 @@ time_keeper.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 stdlib.h
 -
-stdlib.h
--
 
 /home/pookie/Documents/code/C/CProj/message_helper.c
 message_helper.h
@@ -156,6 +180,8 @@ stdio.h
 unistd.h
 -
 sys/socket.h
+-
+pthread.h
 -
 
 /home/pookie/Documents/code/C/CProj/message_helper.h
@@ -173,6 +199,10 @@ stdio.h
 -
 unistd.h
 -
+pthread.h
+-
+memory.h
+-
 
 /home/pookie/Documents/code/C/CProj/message_parser.h
 stdlib.h
@@ -184,6 +214,8 @@ message_defines.h
 stdio.h
 -
 memory.h
+-
+pthread.h
 -
 board_handler.h
 /home/pookie/Documents/code/C/CProj/board_handler.h
@@ -207,11 +239,9 @@ client_registration.h
 /home/pookie/Documents/code/C/CProj/time_keeper.c
 time_keeper.h
 /home/pookie/Documents/code/C/CProj/time_keeper.h
-memory.h
--
 stdio.h
 -
-unistd.h
+pthread.h
 -
 
 /home/pookie/Documents/code/C/CProj/time_keeper.h
@@ -219,4 +249,6 @@ stdlib.h
 -
 time.h
 -
+client_registration.h
+/home/pookie/Documents/code/C/CProj/client_registration.h
 

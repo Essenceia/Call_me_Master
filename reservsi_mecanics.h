@@ -15,4 +15,5 @@ u_int8_t send_status(int socket);
 void end_game();
 u_int8_t is_game_over();
 void send_game_end(int socket);
+CLIENT_LIST get_turn();
 #endif //CPROJ_RESERVSI_MECANICS_H

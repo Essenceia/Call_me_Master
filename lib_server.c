@@ -5,40 +5,25 @@
 #include <string.h>
 #include <signal.h>
 #include <unistd.h>
+#include <pthread.h>
 #include "gams_status.h"
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 
-void kill_handler(int killid) {
-    printf("WARN_:kill handler called , process will be killed with message %d\n", killid);
-    close_server();
-}
-
-void client_kill_handler(int killid) {
-    printf("WARN_:Client kill handler, child process will be killes with message %d\n", killid);
-    for (int i = 0; i < MAX_CLIENT_NUMBER; i++) {
-        destroy_connection_base(&(Server->cbase[i]));
-    }
-}
-
-void warn_server() {
-    printf("WARN_:Nothing happening server is gonna die of bordom\n");
-}
 
 void creat_fork(int client_socket) {
     //int* new_socket = (int*)malloc(sizeof(client_socket));
-    int new_socket = client_socket;
     connection_base *tmpbase;
-    pid_t child_pid = fork();
-    if (child_pid == 0) {
+    /*pid_t child_pid = fork();
+    if (child_pid == 0) {*/
         puts("INFO_:Fork created sucess");
         //child process
-        printf("INFO_%d:This is a child thread\n", getpid());
+        printf("INFO_%d:This is a child thread\n on socket %d", pthread_self(),client_socket);
         tmpbase = init_connection(client_socket);
         if (tmpbase != NULL) {
-            printf("INFO_%d_:Client build success,type %x pid %d \n", getpid(), tmpbase->client_type, getpid());
+            printf("INFO_%d_:Client build success,type %x pid %d \n", pthread_self(), tmpbase->client_type, pthread_self());
             Server->cbase[tmpbase->client_type] = *(tmpbase);
-            Server->childpid[tmpbase->client_type] = getpid();
+            //Server->childpid[tmpbase->client_type] = pthread_self();
             Server->cbase[tmpbase->client_type].handler((void *) (tmpbase));
 
 
@@ -48,13 +33,12 @@ void creat_fork(int client_socket) {
         }
 
 
-    } else {
+    } /*else {
         puts("INFO_:This is a parent thread");
-    }
-}
+    }*/
+
 
 int8_t init_server() {
-    int buid_result;
     if (!is_init) {
         //init board
         init_game();
@@ -62,8 +46,8 @@ int8_t init_server() {
         //0 - Init server
         is_init =1;
         puts("INFO_:Initialising server");
-        signal(SIGINT, kill_handler);
         Server = (server_struct *) malloc(sizeof(server_struct));
+        Server->thread_counter = 0;
         Server->socket_desc = socket(AF_INET, SOCK_STREAM, 0);
         if (Server->socket_desc == -1) {
             printf("Server :: ERROR : unable to create socket. \n", 0);
@@ -109,15 +93,21 @@ int8_t run_server() {
         int client_socket;
         struct sockaddr_in client;
         int c = sizeof(client);
+        int err;
         while (!is_game_over()) {
             printf("INFO_: ...\n");
             //client_socket= accept(Server->socket_desc, (struct sockaddr*)&client,(socklen_t*)&c);
             client_socket = accept(Server->socket_desc, (struct sockaddr *) &client, (socklen_t *) &c);
             if (client_socket != -1) {
                 //p- connection accepted
-                printf("INFO_:connection accepted\n");
+                printf("INFO_:connection accepted on socket %d\n",client_socket);
                 //create pthread
-                creat_fork(client_socket);
+                err = pthread_create(&(Server->child[Server->thread_counter]), NULL, &creat_fork,client_socket);
+                if (err != 0) {
+                    printf("\ncan't create thread :[%s]", strerror(err));
+                    return -1;
+                }
+                Server->thread_counter++;
                 //client_socket = -10; //reset client socket
             } else {
 
@@ -144,6 +134,9 @@ int8_t run_server() {
 int8_t close_server() {
     if (!is_game_over()) {
         set_game_over();
+        for(u_int8_t i = 0 ; i < Server->thread_counter ; i++){
+            pthread_exit(Server->child[i]);
+        }
         for (int i = 0; i < MAX_CLIENT_NUMBER; i++) {
             //kill all child threads
             if (Server->cbase[i].alive == ALIVE) {
@@ -155,10 +148,10 @@ int8_t close_server() {
         puts("INFO_:Closing server socket");
         close(Server->socket_desc);
         //destroy child processes
-        kill(0, SIGINT);
         //end game , destroy board
         end_game();
         destroy_game_status();
+
         free(Server);
         return 0;
     }

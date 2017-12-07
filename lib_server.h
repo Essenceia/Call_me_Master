@@ -10,10 +10,11 @@
 #define REUSE_OLD_SOCK
 typedef struct {
     int socket_desc;
+    u_int8_t thread_counter;
   struct sockaddr_in srv_addr;
    // socklen_t addr_size;
     connection_base cbase[MAX_CLIENT_NUMBER];
-    pid_t childpid[MAX_CLIENT_NUMBER];
+    pthread_t child[MAX_CLIENT_NUMBER];
 }server_struct;
 static uint8_t is_init = 0;//0 - not init 1 - is init_server
 static server_struct *Server;

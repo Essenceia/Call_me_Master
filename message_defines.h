@@ -6,14 +6,12 @@
 #define CPROJ_MESSAGE_DEFINES_H_H
 
 #include <stdlib.h>
-#include <stdlib.h>
 #define BLOCK_SYNC  ((u_int8_t)0x55)
 
-#define OFFSET_SYNC ((size_t)0)
-#define OFFSET_LNGT ((size_t)1)
-#define OFFSET_TYPE ((size_t)2)
-#define OFFSET_CRS(mssl) ((size_t)(mssl)-1)
-#define MIN_RECV_LNG 6
+#define OFFSET_SYNC 0
+#define OFFSET_LNGT 1
+#define OFFSET_TYPE 2
+#define OFFSET_CRS(mssl) ((mssl)-1)
 #define CONTROLBLOCKSIZE 4
 typedef enum {
     CONNECT =(u_int8_t) 0x01,

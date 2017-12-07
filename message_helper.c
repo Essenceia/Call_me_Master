@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <pthread.h>
 #define DEBUG
 
 u_int8_t check_valide_legth(u_int8_t tmsglng, u_int8_t msgl){
@@ -29,7 +30,7 @@ u_int8_t check_type_valide(u_int8_t type){
 //product the crc we would be expecting here
 u_int8_t get_crc(u_int8_t *appmsg,size_t alng){
     u_int8_t accumulater=0;
-    printf("INFO_%d:Calculating CRC adding up length %u: \n",getpid(),alng);
+    printf("INFO_%d:Calculating CRC adding up length %u: \n",pthread_self(),alng);
     for(u_int8_t i = 0 ; i < alng ; i++){
         printf("0x%x ",appmsg[i]);
         accumulater +=appmsg[i];
@@ -40,12 +41,12 @@ u_int8_t get_crc(u_int8_t *appmsg,size_t alng){
 }
 u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng){
     MSG_ERROR  error = NO_ERROR;
-    if(recvlng >= MIN_RECV_LNG) {
+    if(recvlng >= CONTROLBLOCKSIZE) {
         if (recvmsg[OFFSET_SYNC] == BLOCK_SYNC) {
             if (check_type_valide(recvmsg[OFFSET_TYPE])) {
                 if(check_valide_legth(recvlng,recvmsg[ OFFSET_LNGT ] )==1 ){
                     puts("INFO_:No error in lenght\n");
-                    if(get_crc(recvmsg,recvlng-1)==recvmsg[OFFSET_CRS(recvlng)]){
+                    if(get_crc(recvmsg+2,recvlng-3)==recvmsg[OFFSET_CRS(recvlng)]){
                         error = NO_ERROR;
                         puts("INFO_:NO ERROR");
 
@@ -76,21 +77,29 @@ u_int8_t check_error(u_int8_t *recvmsg,u_int8_t recvlng){
 }
 u_int8_t *prepare_message(comm_message *tosend){
 #ifdef DEBUG
-    printf("INFO_%d:Preparing message of type 0x%x , length %u\n",getpid(),tosend->type,tosend->mesg_lng);
+    u_int8_t j,length = CONTROLBLOCKSIZE + tosend->mesg_lng;
+    printf("INFO_%d:Preparing message of type 0x%x , length %u\n",pthread_self(),tosend->type,tosend->mesg_lng);
 #endif
     u_int8_t *repared=NULL;
     if(tosend->mesg_lng>=0 && check_type_valide(tosend->type)) {
-        repared = (u_int8_t *) malloc(sizeof(CONTROLBLOCKSIZE + tosend->mesg_lng));
+        repared = (u_int8_t *) malloc(sizeof(u_int8_t )*(CONTROLBLOCKSIZE + tosend->mesg_lng));
+        if(repared==NULL)printf("ERRO_:Probleme de malloc\n");
         repared[OFFSET_SYNC] = BLOCK_SYNC;
         repared[OFFSET_TYPE] = tosend->type;
         repared[OFFSET_LNGT]=tosend->mesg_lng;
-        for(int i = 0 ; i<tosend->mesg_lng; i++){
-            repared[OFFSET_TYPE+1+i]=tosend->msg[i];
+        for(u_int8_t i = 0 ; i<tosend->mesg_lng; i++){
+            j = OFFSET_TYPE+1+i;
+            printf("j : %x\n",tosend->msg[i]);
+            j = tosend->msg[i];
+            repared[OFFSET_TYPE+1+i]=j;
         }
-        repared[CONTROLBLOCKSIZE+tosend->mesg_lng-1]=get_crc(repared,(sizeof(repared)/sizeof(u_int8_t)));
+#ifdef DEBUG
+        printf("INFO_%d: Message is prepared sending crc\n");
+#endif
+        repared[CONTROLBLOCKSIZE+tosend->mesg_lng-1]=get_crc(repared,(CONTROLBLOCKSIZE+tosend->mesg_lng-1));
     }
 #ifdef DEBUG
-    printf("INFO_%d:Prepared message with parameters sync %x type %x length %o :\n",getpid(),0x55,tosend->type,tosend->mesg_lng);
+    printf("INFO_%d:Prepared message with parameters sync %x type %x length %o :\n",pthread_self(),0x55,tosend->type,tosend->mesg_lng);
     for(int i = 0 ; i < (tosend->mesg_lng+CONTROLBLOCKSIZE); i++){
         printf("_0x%x",repared[i]);
     }
@@ -104,14 +113,16 @@ int8_t sendof(int socket,comm_message* tosend){
     u_int8_t *officle_msg=prepare_message(tosend);
 
     if(officle_msg!=NULL) {
+        printf("INFO_:Startting to send message\n");
         if (send(socket, officle_msg, tosend->mesg_lng + CONTROLBLOCKSIZE, 0) == -1) {
-            printf("ERRO_:%d Message send failed\n", getpid());
+            printf("ERRO_:%d Message send failed\n", pthread_self());
             perror("ERRO_:Sending message failed reason");
             retv = -1;
-        }
-        free(officle_msg);
+        }else printf("INFO_:Message sucessfully send\n");
+        printf("INFO_:Finish to send message\n");
+        //free(officle_msg);
     }else{
-        printf("ERRO_%d:Our message had problemes in preperation\n",getpid());
+        printf("ERRO_%d:Our message had problemes in preperation\n",pthread_self());
     }
     destroy_msg(tosend);
     return retv;
@@ -121,7 +132,7 @@ void msg_player_ok(u_int8_t playertype, int socket){
     comm_message *nwmsg=(comm_message*)malloc(sizeof(comm_message));
     u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
     msg[0]=((playertype==0x01)?0x01:0x02);//if type == BP
-    printf("INFO_%d:Client type %o",getpid(),playertype);
+    printf("INFO_%d:Client type %o",pthread_self(),playertype);
     nwmsg->mesg_lng=2;
     nwmsg->type=PLAYER_OK;
     nwmsg->msg=msg;
@@ -131,7 +142,7 @@ void msg_player_ok(u_int8_t player,int socket){
     comm_message *nwmsg=(comm_message*)malloc(sizeof(comm_message));
     u_int8_t *msg=(u_int8_t *)malloc(sizeof(u_int8_t)*1);
     if(player!=0x01 && player!=0x02){
-        printf("ERRO_%d:Ok Nok value is wrong , value got %x\n",getpid(),player);
+        printf("ERRO_%d:Ok Nok value is wrong , value got %x\n",pthread_self(),player);
         player = 0x01;
     }
     msg[0]=player;

@@ -12,8 +12,8 @@
 //#define BOARD_MSG_ADDITIONL_DATA 4
 
 #include <stdlib.h>
-typedef enum {EMPTY = 0, WHITE = 1,BLACK = 2,NOT_USED=3  }CELL;
-typedef enum { PROX_NONE = 0,PROX_WHITE =1,PROX_BLACK=2,PROX_BOTH=3,PROX_USED =4}CELL_PROX;
+typedef enum {EMPTY = 0, BLACK = 1,WHITE = 2,NOT_USED=3  }CELL;
+typedef enum { PROX_NONE = 0,PROX_WHITE =2,PROX_BLACK=1,PROX_BOTH=3,PROX_USED =4}CELL_PROX;
 typedef struct{
     u_int8_t lastmove_x;
     u_int8_t lastmove_y;

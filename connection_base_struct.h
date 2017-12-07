@@ -13,7 +13,6 @@
 typedef enum  {ALIVE=0xff, DEAD=0x00}CONNECTION_LIFE;
 typedef void (*msg_handler)(void*);
 typedef struct {
-    TimeKeeper *clock;
     int dest_socket;//destination socket
     comm_message* rev_msg;
     comm_message* tosend_msg;

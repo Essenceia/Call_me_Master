@@ -16,12 +16,16 @@ CMakeFiles/NAME.dir/connection_base_struct.c.o: ../message_defines.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/connection_base_struct.c.o: ../time_keeper.h
 
+CMakeFiles/NAME.dir/game_step.c.o: ../game_step.c
+CMakeFiles/NAME.dir/game_step.c.o: ../game_step.h
+
 CMakeFiles/NAME.dir/gams_status.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/gams_status.c.o: ../gams_status.c
 CMakeFiles/NAME.dir/gams_status.c.o: ../gams_status.h
 
 CMakeFiles/NAME.dir/lib_connection.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/lib_connection.c.o: ../connection_base_struct.h
+CMakeFiles/NAME.dir/lib_connection.c.o: ../game_step.h
 CMakeFiles/NAME.dir/lib_connection.c.o: ../gams_status.h
 CMakeFiles/NAME.dir/lib_connection.c.o: ../lib_connection.c
 CMakeFiles/NAME.dir/lib_connection.c.o: ../lib_connection.h
@@ -70,6 +74,7 @@ CMakeFiles/NAME.dir/reservsi_mecanics.c.o: ../message_parser.h
 CMakeFiles/NAME.dir/reservsi_mecanics.c.o: ../reservsi_mecanics.c
 CMakeFiles/NAME.dir/reservsi_mecanics.c.o: ../reservsi_mecanics.h
 
+CMakeFiles/NAME.dir/time_keeper.c.o: ../client_registration.h
 CMakeFiles/NAME.dir/time_keeper.c.o: ../time_keeper.c
 CMakeFiles/NAME.dir/time_keeper.c.o: ../time_keeper.h
 

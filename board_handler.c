@@ -7,13 +7,16 @@
 #include <stdio.h>
 #include "board_handler.h"
 #include <unistd.h>
+#include <pthread.h>
 
 #define DEBUG
 #ifdef DEBUG
 //#define DEBUG_SUPER
 #endif
+#define DEBUG_SPECIAL
 static board *Board;
 static move_board *CBoard;
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 void showbits(unsigned int x) {
     int i;
     for (i = (sizeof(u_int8_t) * 8) - 1; i >= 0; i--)
@@ -31,8 +34,8 @@ CELL show_at_value(u_int8_t x, u_int8_t y) {
     buffer = ((u_int8_t) val >> offset * 2);
 #ifdef DEBUG_SUPER
     //printf("INFO:Board geetting value coord x:%d,y:%d,value found :\n",x,y);
-    //showbits((0x03&buffer));
-    printf("INFO_%d:CELL at coord x:%x y:%x has value %x\n", getpid(), x, y, (0x03 & buffer));
+    showbits((0x03&buffer));
+    //printf("INFO_%d:CELL at coord x:%x y:%x has value %x\n", pthread_self(), x, y, (0x03 & buffer));
 #endif
     return (CELL) (0x03 & buffer);
 }
@@ -100,33 +103,46 @@ void init_board() {
     //set up center
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            if (col % 3 == 0)set_board(x + j, y + i, WHITE);
-            else set_board(x + j, y + i, BLACK);
+            if (col % 3 == 0){
+                set_board(x + j, y + i, WHITE);
+                update_prox_col(WHITE,x+j,y+i);
+            }
+            else {
+                set_board(x + j, y + i, BLACK);
+                update_prox_col(BLACK,x+j,y+i);
+            }
             col++;
         }
     }
 #ifdef DEBUG
+    printf("WARN_:Initialising board \n");
     print_board();
 #endif
 }
 
 void destroy_board() {
-
+    pthread_mutex_lock (&lock);
     //free(Board->board);
-    free(Board->board_str);
-    free(Board);
+    if(Board!=NULL) {
+        free(Board->board_str);
+        free(Board);
+        Board = NULL;
+    }
+    pthread_mutex_unlock (&lock);
 }
 
 void set_board(u_int8_t x, u_int8_t y, CELL val) {
+    pthread_mutex_lock (&lock);
     u_int16_t absindex;
     u_int8_t mask, buffer, newval;
     u_int8_t offset;
     u_int8_t relindex;
-    if (x < Board->board_size_x && y < Board->board_size_y) {
 #ifdef DEBUG
-        printf("INFO_:Board settinf up board cell x :%x y:%x to value 0x%x\n",
-               x, y, val);
+    printf("INFO_:Board settinf up board cell x :%x y:%x to value 0x%x\n",
+           x, y, val);
 #endif
+    if (x < Board->board_size_x && y < Board->board_size_y) {
+
         //enum
         absindex = gbIx(x, y);
         //Board->board[absindex]= val;
@@ -140,7 +156,7 @@ void set_board(u_int8_t x, u_int8_t y, CELL val) {
 
 
         Board->board_str[relindex] = newval;
-        update_prox_col(val,x,y);
+        //update_prox_col(val,x,y);//nope has to be done at the end of a valide move
 #ifdef DEBUG
         printf("INFO_:Have just updated board\n");
         print_board();
@@ -148,14 +164,18 @@ void set_board(u_int8_t x, u_int8_t y, CELL val) {
     } else {
         printf("ERRO_:Tying to wright to unused board sector x %u y %u\n", x, y);
     }
+    pthread_mutex_unlock (&lock);
 }
 
-//todo finish format block to string
 u_int8_t *format_board() {
     return Board->board_str;
 }
 
 u_int8_t get_board_string_lng() {
+#ifdef DEBUG
+    printf("INFO_:Board length is %d ",Board->str_lng
+    );
+#endif
     return Board->str_lng;
 }
 
@@ -168,7 +188,17 @@ u_int8_t *board_prepare_msg() {
     msg[1] = Board->lastmove_y;
     msg[2] = Board->board_size_x;
     msg[3] = Board->board_size_y;
-    memcpy(msg + 5, Board->board_str, sizeof(u_int8_t) * Board->str_lng);
+    memcpy(msg + 4, Board->board_str,  Board->str_lng);
+#ifdef DEBUG_SPECIAL
+    printf("INFO_:Spedial print de foux :\n");
+    for(int i = 0 ; i < Board->str_lng ; i++){
+        showbits(Board->board_str[i]);
+    }
+    printf("INFO_:Board message :\n");
+    for(int i = 0 ; i < 4 + Board->str_lng ;i ++){
+        printf("_%x",msg[i]);
+    }
+#endif
     return msg;
 }
 
@@ -177,9 +207,12 @@ u_int8_t *board_prepare_msg() {
  * to controller for confirmation
  */
 void register_new_player_move(u_int8_t player, u_int8_t x, u_int8_t y) {
+    pthread_mutex_lock (&lock);
     Board->lastmove_x = x;
     Board->lastmove_y = y;
     Board->lastplayer = player;
+    update_prox_col(get_couleur_joueur(player),x,y);
+    pthread_mutex_unlock (&lock);
 }
 
 u_int8_t get_board_msg_size() {
@@ -208,8 +241,8 @@ CELL get_couleur_adverse(u_int8_t player) {
             printf("ERRO_:Unknown player type %x \n", player);
             break;
     }
-#ifdef DEBUG
-    printf("INFO_%d,Other Player color %x\n", getpid(), retval);
+#ifdef DEBUG_SUPER
+    printf("INFO_%d,Other Player color %x\n", pthread_self(), retval);
 #endif
     return retval;
 }
@@ -227,8 +260,8 @@ CELL get_couleur_joueur(u_int8_t player) {
             printf("ERRO_:Unknown player type %x \n", player);
             break;
     }
-#ifdef DEBUG
-    printf("INFO_%d,Our color %x\n", getpid(), retval);
+#ifdef DEBUG_SUPER
+    printf("INFO_%d,Our color %x\n", pthread_self(), retval);
 #endif
     return retval;
 }
@@ -239,7 +272,7 @@ void init_move_board(){
         CBoard->cboard[i] = (CELL_PROX *) malloc(sizeof(CELL_PROX) * Board->board_size_y);
         //memset(CBoard->cboard[i], 0, sizeof(CELL_PROX) * Board->board_size_y);
     }
-#ifdef DEBUG
+#ifdef DEBUG_SUPER
     printf("INFO_:Filling board\n");
 #endif
     for (u_int8_t i = 0; i < Board->board_size_x; i++) {
@@ -302,6 +335,7 @@ u_int8_t count_round_prox_col(CELL nv_col, int8_t sx,int8_t sy) {
 
 void update_prox_col(CELL prox_col,u_int8_t x,u_int8_t y)//update status of proximity bits when we set a new cell value
 {
+    //no need to lock already protected by calling function
 #ifdef DEBUG
     printf("INFO_:Stating neighbours update of cell in x:%x y:%x\n",x,y );
 #endif
