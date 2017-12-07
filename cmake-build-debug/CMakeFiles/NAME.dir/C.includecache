@@ -15,8 +15,6 @@ stdio.h
 -
 board_handler.h
 /home/pookie/Documents/code/C/CProj/board_handler.h
-unistd.h
--
 pthread.h
 -
 
