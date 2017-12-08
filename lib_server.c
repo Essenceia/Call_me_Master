@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include "gams_status.h"
+#include "print_in_color.h"
+
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 
@@ -14,13 +16,16 @@
 void creat_fork(int client_socket) {
     //int* new_socket = (int*)malloc(sizeof(client_socket));
     connection_base *tmpbase;
+    set_process_color(pthread_self());
     /*pid_t child_pid = fork();
     if (child_pid == 0) {*/
         puts("INFO_:Fork created sucess");
         //child process
+        set_process_color(pthread_self());
         printf("INFO_%d:This is a child thread\n on socket %d", pthread_self(),client_socket);
         tmpbase = init_connection(client_socket);
         if (tmpbase != NULL) {
+            set_process_color(pthread_self());
             printf("INFO_%d_:Client build success,type %x pid %d \n", pthread_self(), tmpbase->client_type, pthread_self());
             Server->cbase[tmpbase->client_type] = *(tmpbase);
             //Server->childpid[tmpbase->client_type] = pthread_self();
@@ -28,6 +33,7 @@ void creat_fork(int client_socket) {
 
 
         } else {
+            set_process_color(pthread_self());
             puts("WARN_:Build failed closing socket");
             close(client_socket);
         }
@@ -78,7 +84,8 @@ int8_t init_server() {
         }
         //Server->size_sock_addr = sizeof(struct sockaddr_in);
         //p- Waiting of incomming transmissions
-        printf("INFO_:Has been intialised , ready to be run\n");
+        printf("Server :Has been intialised , ready to be run on port %x\n",
+               Server->srv_addr.sin_port);
         return 0;
 
     } else {
@@ -112,7 +119,7 @@ int8_t run_server() {
             } else {
 
                 perror("Server");
-                sleep(10);
+
                 printf("WARN_:accept failed with error %d\n", client_socket);
 
                 //return -2;

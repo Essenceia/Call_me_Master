@@ -393,6 +393,33 @@ message_parser.c.s:
 	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/message_parser.c.s
 .PHONY : message_parser.c.s
 
+print_in_color.o: print_in_color.c.o
+
+.PHONY : print_in_color.o
+
+# target to build an object file
+print_in_color.c.o:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/print_in_color.c.o
+.PHONY : print_in_color.c.o
+
+print_in_color.i: print_in_color.c.i
+
+.PHONY : print_in_color.i
+
+# target to preprocess a source file
+print_in_color.c.i:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/print_in_color.c.i
+.PHONY : print_in_color.c.i
+
+print_in_color.s: print_in_color.c.s
+
+.PHONY : print_in_color.s
+
+# target to generate assembly for a file
+print_in_color.c.s:
+	$(MAKE) -f CMakeFiles/NAME.dir/build.make CMakeFiles/NAME.dir/print_in_color.c.s
+.PHONY : print_in_color.c.s
+
 reservsi_mecanics.o: reservsi_mecanics.c.o
 
 .PHONY : reservsi_mecanics.o
@@ -486,6 +513,9 @@ help:
 	@echo "... message_parser.o"
 	@echo "... message_parser.i"
 	@echo "... message_parser.s"
+	@echo "... print_in_color.o"
+	@echo "... print_in_color.i"
+	@echo "... print_in_color.s"
 	@echo "... reservsi_mecanics.o"
 	@echo "... reservsi_mecanics.i"
 	@echo "... reservsi_mecanics.s"

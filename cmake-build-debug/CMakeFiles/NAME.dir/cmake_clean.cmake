@@ -11,6 +11,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/NAME.dir/client_registration.c.o"
   "CMakeFiles/NAME.dir/reservsi_mecanics.c.o"
   "CMakeFiles/NAME.dir/game_step.c.o"
+  "CMakeFiles/NAME.dir/print_in_color.c.o"
   "NAME.pdb"
   "NAME"
 )

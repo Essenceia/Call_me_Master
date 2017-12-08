@@ -8,13 +8,13 @@
 #include <pthread.h>
 #include <memory.h>
 
-#define DEBUG
-
+//#define DEBUG
+#define SHOW_COM
 comm_message *parse_recv_msg(u_int8_t *recvmsg, u_int8_t recvlngth) {
-#ifdef DEBUG
+#ifdef SHOW_COM
     printf("INFO_%d: Recived message length %u: \n", pthread_self(), recvlngth);
     for (int i = 0; i < recvlngth; i++) {
-        printf("_%c(%u)", recvmsg[i], recvmsg[i]);
+        printf("_0x%x",recvmsg[i]);
     }
     printf("\n");
 #endif
@@ -42,7 +42,9 @@ comm_message *parse_recv_msg(u_int8_t *recvmsg, u_int8_t recvlngth) {
 }
 
 void destroy_msg(comm_message *tokill) {
+#ifdef DEBUG
     printf("INFO_%d:Destroying commm message\n");
+#endif
    /* if (tokill != NULL) {
         //if (tokill->msg != NULL)free(tokill->msg);
         free(tokill);

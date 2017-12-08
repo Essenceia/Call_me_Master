@@ -83,6 +83,10 @@ pthread.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
+reservsi_mecanics.h
+/home/pookie/Documents/code/C/CProj/reservsi_mecanics.h
+board_handler.h
+/home/pookie/Documents/code/C/CProj/board_handler.h
 stdlib.h
 -
 
@@ -117,6 +121,8 @@ game_step.h
 /home/pookie/Documents/code/C/CProj/game_step.h
 message_parser.h
 /home/pookie/Documents/code/C/CProj/message_parser.h
+print_in_color.h
+/home/pookie/Documents/code/C/CProj/print_in_color.h
 
 /home/pookie/Documents/code/C/CProj/lib_connection.h
 message_parser.h
@@ -141,6 +147,8 @@ pthread.h
 -
 gams_status.h
 /home/pookie/Documents/code/C/CProj/gams_status.h
+print_in_color.h
+/home/pookie/Documents/code/C/CProj/print_in_color.h
 
 /home/pookie/Documents/code/C/CProj/lib_server.h
 stdint.h
@@ -175,6 +183,8 @@ message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
 message_parser.h
 /home/pookie/Documents/code/C/CProj/message_parser.h
+print_in_color.h
+/home/pookie/Documents/code/C/CProj/print_in_color.h
 stdio.h
 -
 unistd.h
@@ -209,6 +219,14 @@ stdlib.h
 -
 message_defines.h
 /home/pookie/Documents/code/C/CProj/message_defines.h
+
+/home/pookie/Documents/code/C/CProj/print_in_color.c
+print_in_color.h
+/home/pookie/Documents/code/C/CProj/print_in_color.h
+stdio.h
+-
+
+/home/pookie/Documents/code/C/CProj/print_in_color.h
 
 /home/pookie/Documents/code/C/CProj/reservsi_mecanics.c
 stdio.h

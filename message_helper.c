@@ -4,20 +4,22 @@
 #include "message_helper.h"
 #include "message_defines.h"
 #include "message_parser.h"
+#include "print_in_color.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <pthread.h>
 
-#define DEBUG
-
+//#define DEBUG
+#define SHOW_COM
 u_int8_t check_valide_legth(u_int8_t tmsglng, u_int8_t msgl) {
     //verify that the total message length and app message
     //length are of appropriate size
     u_int8_t res;
     res = ((tmsglng == (msgl + CONTROLBLOCKSIZE)) ? 1 : 0);
+#ifdef DEBUG
     printf("INFO_:Message length %o expected length %o, result is %u\n", tmsglng, (msgl + CONTROLBLOCKSIZE), res);
-
+#endif
     return res;
 }
 
@@ -33,13 +35,16 @@ u_int8_t check_type_valide(u_int8_t type) {
 //product the crc we would be expecting here
 u_int8_t get_crc(u_int8_t *appmsg, size_t alng) {
     u_int8_t accumulater = 0;
+#ifdef DEBUG
     printf("INFO_%d:Calculating CRC adding up length %u: \n", pthread_self(), alng);
+#endif
     for (u_int8_t i = 0; i < alng; i++) {
-        printf("0x%x ", appmsg[i]);
         accumulater += appmsg[i];
 
     }
+#ifdef DEBUG
     printf("\nINFO_: CRC value : 0x%x\n", accumulater);
+#endif
     return ((u_int8_t) (accumulater & 0xFF));
 }
 
@@ -49,7 +54,6 @@ u_int8_t check_error(u_int8_t *recvmsg, u_int8_t recvlng) {
         if (recvmsg[OFFSET_SYNC] == BLOCK_SYNC) {
             if (check_type_valide(recvmsg[OFFSET_TYPE])) {
                 if (check_valide_legth(recvlng, recvmsg[OFFSET_LNGT]) == 1) {
-                    puts("INFO_:No error in lenght\n");
                     if (get_crc(recvmsg + 2, recvlng - 3) == recvmsg[OFFSET_CRS(recvlng)]) {
                         error = NO_ERROR;
                         puts("INFO_:NO ERROR");
@@ -91,10 +95,7 @@ u_int8_t *prepare_message(comm_message *tosend) {
         repared[OFFSET_TYPE] = tosend->type;
         repared[OFFSET_LNGT] = tosend->mesg_lng;
         for (u_int8_t i = 0; i < tosend->mesg_lng; i++) {
-            j = OFFSET_TYPE + 1 + i;
-            printf("j : %x\n", tosend->msg[i]);
-            j = tosend->msg[i];
-            repared[OFFSET_TYPE + 1 + i] = j;
+            repared[OFFSET_TYPE + 1 + i] = tosend->msg[i];
         }
 #ifdef DEBUG
         printf("INFO_%d: Message is prepared sending crc\n");
@@ -104,6 +105,10 @@ u_int8_t *prepare_message(comm_message *tosend) {
 #ifdef DEBUG
     printf("INFO_%d:Prepared message with parameters sync %x type %x length %o :\n", pthread_self(), 0x55, tosend->type,
            tosend->mesg_lng);
+#endif
+#ifdef SHOW_COM
+    set_process_color(pthread_self());
+    printf("INFO_%d:Message to be sent :\n",pthread_self());
     for (int i = 0; i < (tosend->mesg_lng + CONTROLBLOCKSIZE); i++) {
         printf("_0x%x", repared[i]);
     }
@@ -118,14 +123,23 @@ int8_t sendof(int socket, comm_message *tosend) {
     u_int8_t *officle_msg = prepare_message(tosend);
 
     if (officle_msg != NULL) {
+#ifdef DEBUG
         printf("INFO_:Startting to send message\n");
+#endif
         if (send(socket, officle_msg, tosend->mesg_lng + CONTROLBLOCKSIZE, 0) == -1) {
+#ifdef DEBUG
             printf("ERRO_:%d Message send failed\n", pthread_self());
+#endif
             perror("ERRO_:Sending message failed reason");
             retv = -1;
-        } else printf("INFO_:Message sucessfully send\n");
+        }
+#ifdef DEBUG
+        else
+            printf("INFO_:Message sucessfully send\n");
+
         printf("INFO_:Finish to send message\n");
         //free(officle_msg);
+#endif
     } else {
         printf("ERRO_%d:Our message had problemes in preperation\n", pthread_self());
     }

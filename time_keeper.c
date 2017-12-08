@@ -4,8 +4,8 @@
 #include "time_keeper.h"
 #include <stdio.h>
 #include <pthread.h>
-#define DEFAULT_WAIT_TIME 300
-#define DEBUG
+#define DEFAULT_WAIT_TIME 30
+//#define DEBUG
 #define PINX(p) ((p)==BP)?0:1
 static unsigned char init = 0;
 static TimeKeeper timers[2];
@@ -49,6 +49,7 @@ void timer_start(CLIENT_LIST player){
 }
 void timer_stop(CLIENT_LIST player){
     timers[PINX(player)].active=0;
+
 }
 //todo tel of the remaining time in timer
 u_int8_t timer_get_remaing(CLIENT_LIST player){
@@ -57,4 +58,7 @@ u_int8_t timer_get_remaing(CLIENT_LIST player){
         remaing = (u_int8_t )((0xFF) & (timers[PINX(player)].time_to_warn - time(NULL)));
     }
     return remaing;
+}
+u_int8_t get_elapsed(CLIENT_LIST player){
+    return (u_int8_t )(timers[PINX(player)].time_to_warn - time(NULL));
 }

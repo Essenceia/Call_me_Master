@@ -142,6 +142,12 @@
 		<Unit filename="/home/pookie/Documents/code/C/CProj/message_parser.h">
 			<Option target="NAME"/>
 		</Unit>
+		<Unit filename="/home/pookie/Documents/code/C/CProj/print_in_color.c">
+			<Option target="NAME"/>
+		</Unit>
+		<Unit filename="/home/pookie/Documents/code/C/CProj/print_in_color.h">
+			<Option target="NAME"/>
+		</Unit>
 		<Unit filename="/home/pookie/Documents/code/C/CProj/reservsi_mecanics.c">
 			<Option target="NAME"/>
 		</Unit>

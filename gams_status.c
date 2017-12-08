@@ -6,8 +6,10 @@
 #include <memory.h>
 #include <pthread.h>
 #include "gams_status.h"
+#include "reservsi_mecanics.h"
+#include "board_handler.h"
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 
 #include <stdlib.h>
@@ -44,7 +46,7 @@ void set_game_over() {
 void set_stuck_status(CLIENT_LIST player, u_int8_t is_stuck) {
     pthread_mutex_lock(&lock);
 #ifdef DEBUG
-    printf("WARN_%d:Setting player to stuck, player %x\n",pthread_self(),player);
+    printf("WARN_%d:Setting player to stuck %x , player %x\n",pthread_self(),is_stuck,player);
 #endif
     if (player == WP)game.stuck_WP = is_stuck;
     else game.stuck_BP = is_stuck;
@@ -62,6 +64,8 @@ void init_game_status() {
     game.name_WP_length = 0;
     game.lost_BP = 0;
     game.lost_WP = 0;
+    game.time_WP=0;
+    game.time_BP=0;
     pthread_mutex_unlock(&lock);
 }
 
@@ -113,11 +117,18 @@ void set_lost_status(CLIENT_LIST player) {
 void msg_game_end_status() {
     puts("Game has ended stats ");
     puts("");
-    puts("Player WP");
-    printf("Name %s\nLost :%s Points :0x%x\nStuck :%s\n",
-           (char *) game.name_WP, YESNO(game.lost_WP), game.points_WP, YESNO(game.stuck_WP));
-    puts("Player BP");
-    printf("Name %s\nLost :%s Points :0x%x\nStuck :%s\n",
-           (char *) game.name_BP, YESNO(game.lost_BP), game.points_BP, YESNO(game.stuck_BP));
-    puts("\nDo you want to player a game ?\n\n\n\n\n");
+    puts("Player WP\n");
+    printf("Name %s\nLost :%s Points :%d\nStuck :%s\nTime %lu\n",
+           (char *) game.name_WP, YESNO(game.lost_WP), count_col(WHITE), YESNO(game.stuck_WP),game.time_WP);
+    puts("Player BP\n");
+    printf("Name %s\nLost :%s Points :%d\nStuck :%d\nTime %lu\n",
+           (char *) game.name_BP, YESNO(game.lost_BP), count_col(BLACK), YESNO(game.stuck_BP),game.time_BP);
+    puts("\nDo you want to player a game ?\n\n\n\n\n"
+                 "Made with love by Julia Desmazes & Benjamin Levy \n\n\n");
+}
+void increment_time(CLIENT_LIST player,u_int8_t t){
+    if(player==WP){
+        game.time_WP += t;
+
+    }else game.time_BP += t;
 }

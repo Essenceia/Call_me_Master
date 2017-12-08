@@ -20,6 +20,8 @@ typedef struct{
     u_int8_t name_WP_length;
     u_int8_t * name_WP;
     u_int8_t * name_BP;
+    u_int64_t time_WP;
+    u_int64_t time_BP;
 }game_status;
 //set game status
 void add_point(CLIENT_LIST player,u_int8_t points);
@@ -36,5 +38,6 @@ u_int8_t get_status_length();
 void set_lost_status(CLIENT_LIST player);
 void restart_game_status();
 void msg_game_end_status();
+void increment_time(CLIENT_LIST player,u_int8_t t);
 
 #endif //CPROJ_GAMS_STATUS_H

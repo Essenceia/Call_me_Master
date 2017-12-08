@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/pookie/Documents/code/C/CProj/main.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/main.c.o"
   "/home/pookie/Documents/code/C/CProj/message_helper.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/message_helper.c.o"
   "/home/pookie/Documents/code/C/CProj/message_parser.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/message_parser.c.o"
+  "/home/pookie/Documents/code/C/CProj/print_in_color.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/print_in_color.c.o"
   "/home/pookie/Documents/code/C/CProj/reservsi_mecanics.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/reservsi_mecanics.c.o"
   "/home/pookie/Documents/code/C/CProj/time_keeper.c" "/home/pookie/Documents/code/C/CProj/cmake-build-debug/CMakeFiles/NAME.dir/time_keeper.c.o"
   )

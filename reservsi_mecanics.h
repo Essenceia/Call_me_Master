@@ -16,4 +16,6 @@ void end_game();
 u_int8_t is_game_over();
 void send_game_end(int socket);
 CLIENT_LIST get_turn();
+u_int8_t count_col(u_int8_t col);
+
 #endif //CPROJ_RESERVSI_MECANICS_H

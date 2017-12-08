@@ -14,7 +14,9 @@
 #include "gams_status.h"
 #include "game_step.h"
 #include "message_parser.h"
+#include "print_in_color.h"
 //#define WAIT_FOR_ALL
+//#define DEBUG
 
 /*
  * Connection handler for player
@@ -23,6 +25,7 @@
 const CLIENT_LIST Play_order[2] = {BP, WP};
 
 void player_handler(void *player) {
+    set_process_color(pthread_self());
     printf("INFO_%d:Starting client handler\n", pthread_self());
     connection_base *Player = (connection_base *) player;
 
@@ -49,12 +52,15 @@ void player_handler(void *player) {
 #endif
         {
         //check if our turn
-        sleep(1);
+
+#ifdef DEBUG
         printf("INFO_%d:In while loop , player type %x ,turn of type %x game_step %x \n", pthread_self(),Player->client_type,Play_order[(get_game_step() % 2)],get_game_step());
+#endif
         if (Play_order[(get_game_step() % 2)] == Player->client_type) {
             //send New move
-
+#ifdef DEBUG
             printf("INFO_%d:Our turn get to play\n", pthread_self());
+#endif
             //send turn message - check if should ship next turn
             if (new_move_for_player(Player->dest_socket, Player->client_type)) {
 
@@ -63,33 +69,32 @@ void player_handler(void *player) {
 
                 //wait for move recived
                 while(timer_check_elapsed_time(Player->client_type)==TIMER_COUNTING) {
-                    sleep(1);
                     Player->rev_msg = recive_msg(Player->dest_socket);
                     if (Player->rev_msg != NULL) {
-                        printf("1\n");
+                        increment_time(Player->client_type,get_elapsed(Player->client_type));
                         timer_stop(Player->client_type);
-                        printf("2\n");
                         if (Player->rev_msg->type == NEW_MOVE) {
-                            printf("3\n");
                             switch (check_player_move(Player->dest_socket, Player->client_type, Player->rev_msg)) {
                                 case 0x01:
+                                    set_process_color(pthread_self());
                                     printf("INFO_%d:Move recived from player %x is valide\n", pthread_self(),
                                            Player->client_type);
                                     break;
                                 case 0x00:
-                                    printf("ERRO_%d:Move recived from player %s is NOT valide\n", pthread_self(),
-                                           Player->client_type);
+                                    set_process_color(pthread_self());
+                                    printf("ERRO_:Move recived from player is NOT valide\n");
                                     set_lost_status(Player->client_type);
                                     set_game_over();
                                     break;
                                 default:
+                                    set_process_color(pthread_self());
                                     printf("ERRO_%d:Lookes like something went very wring with move check, ending game\n",
                                            pthread_self());
                                     set_game_over();
                                     break;
                             }
                         }else{
-                            printf("4\n");
+                            set_process_color(pthread_self());
                             printf("WARN_%d:Was expecting new move but got type %x\n",pthread_self(),Player->rev_msg->type);
                         }
                         destroy_msg(Player->rev_msg);
@@ -109,6 +114,7 @@ void player_handler(void *player) {
                         msg_ping(Player->dest_socket);
                         break;
                     default:
+                        set_process_color(pthread_self());
                         printf("ERRO_%d:Recived unexpected message from controller, type %d\n"
                                        "         It was not players turn, you lose\n",
                                pthread_self(), Player->rev_msg->type);
@@ -143,7 +149,7 @@ void gclient_handler(void *controler) {
     setsockopt(Contro->dest_socket, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
 
     while ((!is_game_over()) && has_all_clients()){
-        sleep(1);
+       // sleep(1);
        if(previous_step!=get_game_step()){
            //send statup1 to controller
            send_status(Contro->dest_socket);
@@ -154,7 +160,9 @@ void gclient_handler(void *controler) {
                 case PING:
                     msg_ping(Contro->dest_socket);
                     break;
-                default:printf("ERRO_%d:Recived unexpected message from controller, type %d",
+                default:
+                    set_process_color(pthread_self());
+                    printf("ERRO_%d:Recived unexpected message from controller, type %d",
                     pthread_self(),Contro->rev_msg->type);
                     break;
             }

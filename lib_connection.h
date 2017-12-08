@@ -6,7 +6,6 @@
 #define CPROJ_LIB_CONNECTION_H
 #define MAX_CLIENT_MESSAGE_SIZE ((size_t)50)
 #define INIT_MESSAGE "HELLO I AM YOUR CONNECTION HANDLER"
-#define DEBUG
 
 #include "message_parser.h"
 

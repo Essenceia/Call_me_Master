@@ -25,5 +25,6 @@ typedef struct{
 TIMER_STATUS timer_check_elapsed_time(CLIENT_LIST player);
 void timer_start(CLIENT_LIST player);
 void timer_stop(CLIENT_LIST player);
+u_int8_t get_elapsed(CLIENT_LIST player);
 u_int8_t timer_get_remaing(CLIENT_LIST player);
 #endif //CPROJ_HIDDEN_SERVER_HELPERS_H
